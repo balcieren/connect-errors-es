@@ -1,0 +1,73 @@
+{
+  "name": "connect-es-errors",
+  "version": "0.1.0",
+  "description": "Proto-first, isomorphic error handling for Connect RPC — define errors in .proto, generate type-safe TypeScript constructors",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./plugin": {
+      "import": "./dist/plugin/index.js",
+      "types": "./dist/plugin/index.d.ts"
+    }
+  },
+  "bin": {
+    "protoc-gen-connect-errors-es": "./dist/plugin/bin.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "connect",
+    "connectrpc",
+    "grpc",
+    "errors",
+    "protobuf",
+    "typescript",
+    "rpc"
+  ],
+  "author": "balcieren",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balcieren/connect-es-errors.git"
+  },
+  "homepage": "https://github.com/balcieren/connect-es-errors",
+  "bugs": {
+    "url": "https://github.com/balcieren/connect-es-errors/issues"
+  },
+  "peerDependencies": {
+    "@connectrpc/connect": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.65.0",
+    "@bufbuild/protoc-gen-es": "^2.11.0",
+    "@connectrpc/connect": "^2.0.0",
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.11.0",
+    "@bufbuild/protoplugin": "^2.11.0"
+  }
+}
