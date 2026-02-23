@@ -1,7 +1,7 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { getHeaderKeys } from "../config.js";
-import { create, createWithMessage, wrap } from "../create.js";
+import { create, createf, createWithMessage, wrap } from "../create.js";
 import { connectCode, extractErrorCode, fromError, isRetryable } from "../inspect.js";
 import { clearRegistry, register } from "../registry.js";
 
@@ -54,4 +54,17 @@ test("unknown code returns internal error with default metadata", () => {
   const err = create("UNKNOWN");
   expect(err.code).toBe(Code.Internal);
   expect(extractErrorCode(err)).toBe("UNKNOWN");
+});
+
+test("createf shorthand", () => {
+  const err = createf("ERROR_USER_NOT_FOUND", "Direct message");
+  expect(err.rawMessage).toBe("Direct message");
+});
+
+test("wrap with unknown code", () => {
+  const inner = new Error("oops");
+  const err = wrap("ABSENT", inner);
+  expect(err.code).toBe(Code.Internal);
+  expect(err.cause).toBe(inner);
+  expect(extractErrorCode(err)).toBe("ABSENT");
 });
