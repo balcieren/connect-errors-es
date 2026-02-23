@@ -114,6 +114,29 @@ npx protoc \
 
 See the [full instructions](https://buf.build/balcieren/connect-errors) for defining errors using the custom `connecterrors.v1` proto options.
 
+## Step 3: Available Connect Error Codes
+
+When defining errors in your `.proto` file, use the following values for the `connect_code` field. These map to standard [Connect RPC status codes](https://connectrpc.com/docs/protocol/#error-codes).
+
+| `connect_code`             | Description                                                                             |
+| :------------------------- | :-------------------------------------------------------------------------------------- |
+| `CODE_CANCELED`            | The operation was canceled.                                                             |
+| `CODE_UNKNOWN`             | Unknown error.                                                                          |
+| `CODE_INVALID_ARGUMENT`    | Client specified an invalid argument.                                                   |
+| `CODE_DEADLINE_EXCEEDED`   | Deadline expired before operation could complete.                                       |
+| `CODE_NOT_FOUND`           | Some requested entity was not found.                                                    |
+| `CODE_ALREADY_EXISTS`      | Some entity that we attempted to create already exists.                                 |
+| `CODE_PERMISSION_DENIED`   | The caller does not have permission to execute the operation.                           |
+| `CODE_RESOURCE_EXHAUSTED`  | Some resource has been exhausted (e.g. per-user quota).                                 |
+| `CODE_FAILED_PRECONDITION` | Operation was rejected because the system is not in a state required for its execution. |
+| `CODE_ABORTED`             | The operation was aborted.                                                              |
+| `CODE_OUT_OF_RANGE`        | Operation was attempted past the valid range.                                           |
+| `CODE_UNIMPLEMENTED`       | Operation is not implemented or not supported/enabled.                                  |
+| `CODE_INTERNAL`            | Internal errors.                                                                        |
+| `CODE_UNAVAILABLE`         | The service is currently unavailable.                                                   |
+| `CODE_DATA_LOSS`           | Unrecoverable data loss or corruption.                                                  |
+| `CODE_UNAUTHENTICATED`     | The request does not have valid authentication credentials.                             |
+
 ## Compatibility
 
 | Environment        | Supported |
