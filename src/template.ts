@@ -1,4 +1,4 @@
-import { M } from "./types.js";
+import { M } from "./types";
 
 export class MissingFieldError extends Error {
   template: string;

@@ -1,9 +1,9 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
-import { getHeaderKeys } from "../config.js";
-import { create, createf, createWithMessage, wrap } from "../create.js";
-import { connectCode, extractErrorCode, fromError, isRetryable } from "../inspect.js";
-import { clearRegistry, register } from "../registry.js";
+import { getHeaderKeys } from "../config";
+import { create, createf, createWithMessage, wrap } from "../create";
+import { connectCode, extractErrorCode, fromError, isRetryable } from "../inspect";
+import { clearRegistry, register } from "../registry";
 
 beforeEach(() => {
   clearRegistry();

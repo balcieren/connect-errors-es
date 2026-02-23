@@ -1,6 +1,6 @@
 import { Code } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
-import { clearRegistry, lookup, register, registerAll } from "../registry.js";
+import { clearRegistry, lookup, register, registerAll } from "../registry";
 
 beforeEach(() => {
   clearRegistry();

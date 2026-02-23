@@ -1,12 +1,12 @@
 import { getExtension, hasExtension } from "@bufbuild/protobuf";
 import { Schema } from "@bufbuild/protoplugin";
-import { Code as ProtoCode, connect_error, error } from "./gen/connecterrors/v1/error_pb.js";
+import { Code as ProtoCode, connect_error, error } from "./gen/connecterrors/v1/error_pb";
 import {
   codeToConstantName,
   codeToConstructorName,
   codeToMatcherName,
   codeToParamsName,
-} from "./naming.js";
+} from "./naming";
 
 // Extract {{fields}} from the message template
 function extractTemplateFields(tpl: string): string[] {

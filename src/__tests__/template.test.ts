@@ -4,7 +4,7 @@ import {
   MissingFieldError,
   templateFields,
   validateTemplate,
-} from "../template.js";
+} from "../template";
 
 test("templateFields", () => {
   expect(templateFields("User '{{id}}' in {{org}}")).toEqual(["id", "org"]);

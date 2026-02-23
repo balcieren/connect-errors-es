@@ -1,8 +1,8 @@
 import { Code, ConnectError } from "@connectrpc/connect";
-import { getHeaderKeys } from "./config.js";
-import { lookup } from "./registry.js";
-import { formatTemplate, validateTemplate } from "./template.js";
-import { M } from "./types.js";
+import { getHeaderKeys } from "./config";
+import { lookup } from "./registry";
+import { formatTemplate, validateTemplate } from "./template";
+import { M } from "./types";
 
 function applyMetadata(err: ConnectError, code: string, retryable: boolean): ConnectError {
   const { codeKey, retryableKey } = getHeaderKeys();

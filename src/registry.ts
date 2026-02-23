@@ -1,4 +1,4 @@
-import { ErrorDefinition } from "./types.js";
+import { ErrorDefinition } from "./types";
 
 const registry = new Map<string, ErrorDefinition>();
 

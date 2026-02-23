@@ -1,8 +1,8 @@
 import { Code } from "@connectrpc/connect";
 import { expect, test, vi } from "vitest";
-import { create } from "../create.js";
-import { errorInterceptor } from "../interceptor.js";
-import { clearRegistry, register } from "../registry.js";
+import { create } from "../create";
+import { errorInterceptor } from "../interceptor";
+import { clearRegistry, register } from "../registry";
 
 test("errorInterceptor catches ConnectError and extracts definition", async () => {
   clearRegistry();

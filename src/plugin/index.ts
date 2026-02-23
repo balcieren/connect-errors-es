@@ -1,6 +1,6 @@
 import { createEcmaScriptPlugin } from "@bufbuild/protoplugin";
-import { generate } from "./generate.js";
-import { getVersion } from "./version.js";
+import { generate } from "./generate";
+import { getVersion } from "./version";
 
 export function createExtProtoPlugin() {
   return createEcmaScriptPlugin({

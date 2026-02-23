@@ -1,5 +1,5 @@
 import { Code } from "@connectrpc/connect";
-import { registerAll } from "./registry.js";
+import { registerAll } from "./registry";
 
 export const ErrNotFound = "ERROR_NOT_FOUND" as const;
 export const ErrInvalidArgument = "ERROR_INVALID_ARGUMENT" as const;

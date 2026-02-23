@@ -1,7 +1,7 @@
 import { Code, ConnectError } from "@connectrpc/connect";
-import { getHeaderKeys } from "./config.js";
-import { lookup } from "./registry.js";
-import { ErrorDefinition } from "./types.js";
+import { getHeaderKeys } from "./config";
+import { lookup } from "./registry";
+import { ErrorDefinition } from "./types";
 
 export function extractErrorCode(err: unknown): string | null {
   if (!(err instanceof ConnectError)) {

@@ -5,7 +5,7 @@ import {
     codeToMatcherName,
     codeToName,
     codeToParamsName,
-} from "../plugin/naming.js";
+} from "../plugin/naming";
 
 describe("plugin naming logic", () => {
   test("codeToName stripping and formatting", () => {

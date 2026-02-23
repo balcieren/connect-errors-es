@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { getHeaderKeys, setHeaderKeys } from "../config.js";
+import { getHeaderKeys, setHeaderKeys } from "../config";
 
 test("header key configuration", () => {
   // Default values

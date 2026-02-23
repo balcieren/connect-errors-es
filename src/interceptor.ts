@@ -1,6 +1,6 @@
 import { ConnectError, Interceptor } from "@connectrpc/connect";
-import { fromError } from "./inspect.js";
-import { ErrorInterceptorFn } from "./types.js";
+import { fromError } from "./inspect";
+import { ErrorInterceptorFn } from "./types";
 
 /**
  * Creates a Connect RPC interceptor that catches any thrown ConnectErrors
