@@ -45,11 +45,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/balcieren/connect-es-errors.git"
+    "url": "https://github.com/balcieren/connect-errors-es.git"
   },
-  "homepage": "https://github.com/balcieren/connect-es-errors",
+  "homepage": "https://github.com/balcieren/connect-errors-es",
   "bugs": {
-    "url": "https://github.com/balcieren/connect-es-errors/issues"
+    "url": "https://github.com/balcieren/connect-errors-es/issues"
   },
   "peerDependencies": {
     "@connectrpc/connect": ">=1.0.0"

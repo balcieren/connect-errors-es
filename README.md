@@ -1,7 +1,7 @@
 # connect-es-errors
 
-[![Test](https://github.com/balcieren/connect-es-errors/actions/workflows/test.yml/badge.svg)](https://github.com/balcieren/connect-es-errors/actions/workflows/test.yml)
-[![Lint](https://github.com/balcieren/connect-es-errors/actions/workflows/lint.yml/badge.svg)](https://github.com/balcieren/connect-es-errors/actions/workflows/lint.yml)
+[![Test](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml)
+[![Lint](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml)
 [![npm](https://img.shields.io/npm/v/connect-es-errors)](https://www.npmjs.com/package/connect-es-errors)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
