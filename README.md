@@ -1,4 +1,4 @@
-# connect-errors-es
+# connect-errors
 
 [![Test](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml)
 [![Lint](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml)
@@ -14,7 +14,7 @@ The ECMAScript/TypeScript counterpart of [`connect-go-errors`](https://github.co
 option (connecterrors.v1.error) = {
   code: "ERROR_USER_NOT_FOUND"
   message: "User '{{id}}' not found"
-  connect_code: "not_found"
+  connect_code: CODE_NOT_FOUND
 };
 ```
 
@@ -91,9 +91,12 @@ plugins:
   #   opt: target=ts
 ```
 
-Then run `buf` via `npx` so it finds the binary in your `node_modules`.
+Then run `buf` via `npx` so it finds the binary in your `node_modules`:
 
-````bash
+```bash
+npx buf generate
+```
+
 ### Option B: Basic Protoc (without Buf)
 
 If you don't use Buf and rely on the standard `protoc` compiler, you can invoke the local plugin via `npx` directly in your terminal command:
@@ -105,7 +108,7 @@ npx protoc \
   --connect-errors-es_out=gen/ts \
   --plugin=protoc-gen-connect-errors-es=./node_modules/.bin/protoc-gen-connect-errors-es \
   proto/service.proto
-````
+```
 
 ## Step 2: Define Errors in Proto
 
