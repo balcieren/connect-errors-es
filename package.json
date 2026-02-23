@@ -1,5 +1,5 @@
 {
-  "name": "connect-errors-es",
+  "name": "connect-errors",
   "version": "0.1.0",
   "description": "Proto-first, isomorphic error handling for Connect RPC — define errors in .proto, generate type-safe TypeScript constructors",
   "type": "module",
