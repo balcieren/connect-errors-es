@@ -32,12 +32,14 @@ export function generate(schema: Schema) {
     >();
 
     // 1. Gather file-level errors
+    // We cast schema.targets to any[] here because the @bufbuild/protoplugin v2
+    // Target type and DescFile don't always align perfectly in all TS environments.
     if (
-      schema.targets.includes(file as any) &&
+      (schema.targets as any[]).includes(file) &&
       file.proto.options &&
-      hasExtension(file.proto.options as any, error)
+      hasExtension(file.proto.options, error)
     ) {
-      const fileErrors = getExtension(file.proto.options as any, error);
+      const fileErrors = getExtension(file.proto.options, error);
       for (const e of fileErrors) {
         errorDefs.set(e.code, e);
       }
@@ -46,8 +48,8 @@ export function generate(schema: Schema) {
     // 2. Gather method-level errors
     for (const service of file.services) {
       for (const method of service.methods) {
-        if (method.proto.options && hasExtension(method.proto.options as any, connect_error)) {
-          const methodErrors = getExtension(method.proto.options as any, connect_error);
+        if (method.proto.options && hasExtension(method.proto.options, connect_error)) {
+          const methodErrors = getExtension(method.proto.options, connect_error);
           for (const e of methodErrors) {
             errorDefs.set(e.code, e);
           }
