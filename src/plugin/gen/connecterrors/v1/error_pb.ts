@@ -2,8 +2,8 @@
 // @generated from file connecterrors/v1/error.proto (package connecterrors.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenExtension, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import { extDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenExtension, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, extDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import type { FileOptions, MethodOptions } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_descriptor } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
@@ -11,12 +11,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file connecterrors/v1/error.proto.
  */
-export const file_connecterrors_v1_error: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Chxjb25uZWN0ZXJyb3JzL3YxL2Vycm9yLnByb3RvEhBjb25uZWN0ZXJyb3JzLnYxIlIKCEVycm9yRGVmEgwKBGNvZGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCRIUCgxjb25uZWN0X2NvZGUYAyABKAkSEQoJcmV0cnlhYmxlGAQgASgIOmEKDWNvbm5lY3RfZXJyb3ISHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjRhgMgAygLMhouY29ubmVjdGVycm9ycy52MS5FcnJvckRlZlIMY29ubmVjdEVycm9yOlAKBWVycm9yEhwuZ29vZ2xlLnByb3RvYnVmLkZpbGVPcHRpb25zGNKGAyADKAsyGi5jb25uZWN0ZXJyb3JzLnYxLkVycm9yRGVmUgVlcnJvckLPAQoUY29tLmNvbm5lY3RlcnJvcnMudjFCCkVycm9yUHJvdG9QAVpKZ2l0aHViLmNvbS9iYWxjaWVyZW4vY29ubmVjdC1nby1lcnJvcnMvcHJvdG8vY29ubmVjdGVycm9ycztjb25uZWN0ZXJyb3JzcGKiAgNDWFiqAhBDb25uZWN0ZXJyb3JzLlYxygIQQ29ubmVjdGVycm9yc1xWMeICHENvbm5lY3RlcnJvcnNcVjFcR1BCTWV0YWRhdGHqAhFDb25uZWN0ZXJyb3JzOjpWMWIGcHJvdG8z",
-    [file_google_protobuf_descriptor],
-  );
+export const file_connecterrors_v1_error: GenFile = /*@__PURE__*/
+  fileDesc("Chxjb25uZWN0ZXJyb3JzL3YxL2Vycm9yLnByb3RvEhBjb25uZWN0ZXJyb3JzLnYxImoKCEVycm9yRGVmEgwKBGNvZGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCRIsCgxjb25uZWN0X2NvZGUYAyABKA4yFi5jb25uZWN0ZXJyb3JzLnYxLkNvZGUSEQoJcmV0cnlhYmxlGAQgASgIKpQDCgRDb2RlEhQKEENPREVfVU5TUEVDSUZJRUQQABIRCg1DT0RFX0NBTkNFTEVEEAESEAoMQ09ERV9VTktOT1dOEAISGQoVQ09ERV9JTlZBTElEX0FSR1VNRU5UEAMSGgoWQ09ERV9ERUFETElORV9FWENFRURFRBAEEhIKDkNPREVfTk9UX0ZPVU5EEAUSFwoTQ09ERV9BTFJFQURZX0VYSVNUUxAGEhoKFkNPREVfUEVSTUlTU0lPTl9ERU5JRUQQBxIbChdDT0RFX1JFU09VUkNFX0VYSEFVU1RFRBAIEhwKGENPREVfRkFJTEVEX1BSRUNPTkRJVElPThAJEhAKDENPREVfQUJPUlRFRBAKEhUKEUNPREVfT1VUX09GX1JBTkdFEAsSFgoSQ09ERV9VTklNUExFTUVOVEVEEAwSEQoNQ09ERV9JTlRFUk5BTBANEhQKEENPREVfVU5BVkFJTEFCTEUQDhISCg5DT0RFX0RBVEFfTE9TUxAPEhgKFENPREVfVU5BVVRIRU5USUNBVEVEEBA6YQoNY29ubmVjdF9lcnJvchIeLmdvb2dsZS5wcm90b2J1Zi5NZXRob2RPcHRpb25zGNGGAyADKAsyGi5jb25uZWN0ZXJyb3JzLnYxLkVycm9yRGVmUgxjb25uZWN0RXJyb3I6UAoFZXJyb3ISHC5nb29nbGUucHJvdG9idWYuRmlsZU9wdGlvbnMY0oYDIAMoCzIaLmNvbm5lY3RlcnJvcnMudjEuRXJyb3JEZWZSBWVycm9yQs8BChRjb20uY29ubmVjdGVycm9ycy52MUIKRXJyb3JQcm90b1ABWkpnaXRodWIuY29tL2JhbGNpZXJlbi9jb25uZWN0LWVycm9ycy1nby9wcm90by9jb25uZWN0ZXJyb3JzO2Nvbm5lY3RlcnJvcnNwYqICA0NYWKoCEENvbm5lY3RlcnJvcnMuVjHKAhBDb25uZWN0ZXJyb3JzXFYx4gIcQ29ubmVjdGVycm9yc1xWMVxHUEJNZXRhZGF0YeoCEUNvbm5lY3RlcnJvcnM6OlYxYgZwcm90bzM", [file_google_protobuf_descriptor]);
 
 /**
  * ErrorDef defines a single error that can be attached to an RPC method.
@@ -40,11 +36,11 @@ export type ErrorDef = Message<"connecterrors.v1.ErrorDef"> & {
   message: string;
 
   /**
-   * Connect RPC status code name, e.g. "not_found", "invalid_argument".
+   * Connect RPC status code.
    *
-   * @generated from field: string connect_code = 3;
+   * @generated from field: connecterrors.v1.Code connect_code = 3;
    */
-  connectCode: string;
+  connectCode: Code;
 
   /**
    * Whether the client should retry the request on this error.
@@ -58,20 +54,116 @@ export type ErrorDef = Message<"connecterrors.v1.ErrorDef"> & {
  * Describes the message connecterrors.v1.ErrorDef.
  * Use `create(ErrorDefSchema)` to create a new message.
  */
-export const ErrorDefSchema: GenMessage<ErrorDef> =
-  /*@__PURE__*/
+export const ErrorDefSchema: GenMessage<ErrorDef> = /*@__PURE__*/
   messageDesc(file_connecterrors_v1_error, 0);
+
+/**
+ * Code defines the standard Connect RPC status codes.
+ *
+ * @generated from enum connecterrors.v1.Code
+ */
+export enum Code {
+  /**
+   * @generated from enum value: CODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: CODE_CANCELED = 1;
+   */
+  CANCELED = 1,
+
+  /**
+   * @generated from enum value: CODE_UNKNOWN = 2;
+   */
+  UNKNOWN = 2,
+
+  /**
+   * @generated from enum value: CODE_INVALID_ARGUMENT = 3;
+   */
+  INVALID_ARGUMENT = 3,
+
+  /**
+   * @generated from enum value: CODE_DEADLINE_EXCEEDED = 4;
+   */
+  DEADLINE_EXCEEDED = 4,
+
+  /**
+   * @generated from enum value: CODE_NOT_FOUND = 5;
+   */
+  NOT_FOUND = 5,
+
+  /**
+   * @generated from enum value: CODE_ALREADY_EXISTS = 6;
+   */
+  ALREADY_EXISTS = 6,
+
+  /**
+   * @generated from enum value: CODE_PERMISSION_DENIED = 7;
+   */
+  PERMISSION_DENIED = 7,
+
+  /**
+   * @generated from enum value: CODE_RESOURCE_EXHAUSTED = 8;
+   */
+  RESOURCE_EXHAUSTED = 8,
+
+  /**
+   * @generated from enum value: CODE_FAILED_PRECONDITION = 9;
+   */
+  FAILED_PRECONDITION = 9,
+
+  /**
+   * @generated from enum value: CODE_ABORTED = 10;
+   */
+  ABORTED = 10,
+
+  /**
+   * @generated from enum value: CODE_OUT_OF_RANGE = 11;
+   */
+  OUT_OF_RANGE = 11,
+
+  /**
+   * @generated from enum value: CODE_UNIMPLEMENTED = 12;
+   */
+  UNIMPLEMENTED = 12,
+
+  /**
+   * @generated from enum value: CODE_INTERNAL = 13;
+   */
+  INTERNAL = 13,
+
+  /**
+   * @generated from enum value: CODE_UNAVAILABLE = 14;
+   */
+  UNAVAILABLE = 14,
+
+  /**
+   * @generated from enum value: CODE_DATA_LOSS = 15;
+   */
+  DATA_LOSS = 15,
+
+  /**
+   * @generated from enum value: CODE_UNAUTHENTICATED = 16;
+   */
+  UNAUTHENTICATED = 16,
+}
+
+/**
+ * Describes the enum connecterrors.v1.Code.
+ */
+export const CodeSchema: GenEnum<Code> = /*@__PURE__*/
+  enumDesc(file_connecterrors_v1_error, 0);
 
 /**
  * @generated from extension: repeated connecterrors.v1.ErrorDef connect_error = 50001;
  */
-export const connect_error: GenExtension<MethodOptions, ErrorDef[]> =
-  /*@__PURE__*/
+export const connect_error: GenExtension<MethodOptions, ErrorDef[]> = /*@__PURE__*/
   extDesc(file_connecterrors_v1_error, 0);
 
 /**
  * @generated from extension: repeated connecterrors.v1.ErrorDef error = 50002;
  */
-export const error: GenExtension<FileOptions, ErrorDef[]> =
-  /*@__PURE__*/
+export const error: GenExtension<FileOptions, ErrorDef[]> = /*@__PURE__*/
   extDesc(file_connecterrors_v1_error, 1);
+

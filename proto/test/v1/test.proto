@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package test.v1;
+
+import "connecterrors/v1/error.proto";
+
+service TestService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (connecterrors.v1.connect_error) = {
+      code: "ERROR_USER_NOT_FOUND"
+      message: "User with ID {{id}} not found in database {{db}}"
+      connect_code: CODE_NOT_FOUND
+    };
+  }
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  string name = 1;
+}

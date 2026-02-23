@@ -1,6 +1,6 @@
 import { getExtension, hasExtension } from "@bufbuild/protobuf";
 import { Schema } from "@bufbuild/protoplugin";
-import { connect_error, error } from "./gen/connecterrors/v1/error_pb.js";
+import { Code as ProtoCode, connect_error, error } from "./gen/connecterrors/v1/error_pb.js";
 import {
   codeToConstantName,
   codeToConstructorName,
@@ -23,7 +23,12 @@ export function generate(schema: Schema) {
 
     const errorDefs = new Map<
       string,
-      { code: string; message: string; connectCode: string; retryable: boolean }
+      {
+        code: string;
+        message: string;
+        connectCode: ProtoCode;
+        retryable: boolean;
+      }
     >();
 
     // 1. Gather file-level errors
@@ -73,20 +78,20 @@ export function generate(schema: Schema) {
 
     f.print();
     f.print("// ── Auto-register ───────────────────────────────────");
-    f.print(`${registerAll}([`);
+    f.print(registerAll, "([");
     for (const def of errorDefs.values()) {
-      f.print(`  {`);
-      f.print(`    code: ${codeToConstantName(def.code)},`);
-      f.print(`    messageTpl: ${JSON.stringify(def.message)},`);
-      const connectCodeName = def.connectCode
+      f.print("  {");
+      f.print("    code: ", codeToConstantName(def.code), ",");
+      f.print("    messageTpl: ", JSON.stringify(def.message), ",");
+      const connectCodeName = ProtoCode[def.connectCode]
         .split("_")
-        .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1))
+        .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
         .join("");
-      f.print(`    connectCode: ${Code}.${connectCodeName},`);
-      f.print(`    retryable: ${def.retryable},`);
-      f.print(`  },`);
+      f.print("    connectCode: ", Code, ".", connectCodeName, ",");
+      f.print("    retryable: ", def.retryable, ",");
+      f.print("  },");
     }
-    f.print(`]);`);
+    f.print("]);");
 
     f.print();
     f.print("// ── Typed constructors ──────────────────────────────");
@@ -97,23 +102,23 @@ export function generate(schema: Schema) {
 
       f.print();
       if (fields.length > 0) {
-        f.print(`export interface ${paramsName} {`);
+        f.print("export interface ", paramsName, " {");
         for (const field of fields) {
-          f.print(`  ${field}: string;`);
+          f.print("  ", field, ": string;");
         }
-        f.print(`}`);
+        f.print("}");
         f.print();
-        f.print(`export function ${funcName}(p: ${paramsName}): ${ConnectError} {`);
-        f.print(`  return ${create}(${codeToConstantName(def.code)}, {`);
+        f.print("export function ", funcName, "(p: ", paramsName, "): ", ConnectError, " {");
+        f.print("  return ", create, "(", codeToConstantName(def.code), ", {");
         for (const field of fields) {
-          f.print(`    ${field}: p.${field},`);
+          f.print("    ", field, ": p.", field, ",");
         }
-        f.print(`  });`);
-        f.print(`}`);
+        f.print("  });");
+        f.print("}");
       } else {
-        f.print(`export function ${funcName}(): ${ConnectError} {`);
-        f.print(`  return ${create}(${codeToConstantName(def.code)});`);
-        f.print(`}`);
+        f.print("export function ", funcName, "(): ", ConnectError, " {");
+        f.print("  return ", create, "(", codeToConstantName(def.code), ");");
+        f.print("}");
       }
     }
 
@@ -121,10 +126,10 @@ export function generate(schema: Schema) {
     f.print("// ── Client-side error matchers ──────────────────────");
     for (const def of errorDefs.values()) {
       f.print();
-      f.print(`export function ${codeToMatcherName(def.code)}(err: unknown): boolean {`);
-      f.print(`  if (!(err instanceof ${ConnectError})) return false;`);
-      f.print(`  return ${extractErrorCode}(err) === ${codeToConstantName(def.code)};`);
-      f.print(`}`);
+      f.print("export function ", codeToMatcherName(def.code), "(err: unknown): boolean {");
+      f.print("  if (!(err instanceof ", ConnectError, ")) return false;");
+      f.print("  return ", extractErrorCode, "(err) === ", codeToConstantName(def.code), ";");
+      f.print("}");
     }
   }
 }
