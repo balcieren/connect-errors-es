@@ -35,6 +35,7 @@ export function generate(schema: Schema) {
     // We cast schema.targets to any[] here because the @bufbuild/protoplugin v2
     // Target type and DescFile don't always align perfectly in all TS environments.
     if (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (schema.targets as any[]).includes(file) &&
       file.proto.options &&
       hasExtension(file.proto.options, error)
