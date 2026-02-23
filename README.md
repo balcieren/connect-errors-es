@@ -1,8 +1,8 @@
-# connect-es-errors
+# connect-errors-es
 
 [![Test](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/test.yml)
 [![Lint](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml/badge.svg)](https://github.com/balcieren/connect-errors-es/actions/workflows/lint.yml)
-[![npm](https://img.shields.io/npm/v/connect-es-errors)](https://www.npmjs.com/package/connect-es-errors)
+[![npm](https://img.shields.io/npm/v/connect-errors-es)](https://www.npmjs.com/package/connect-errors-es)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Define errors in `.proto`, generate type-safe TypeScript constructors, catch bugs at compile time.**
@@ -35,13 +35,13 @@ if (isUserNotFound(err)) {
 ## Quick Start
 
 ```bash
-npm install connect-es-errors
+npm install connect-errors-es
 ```
 
 For code generation:
 
 ```bash
-npm install -D connect-es-errors
+npm install -D connect-errors-es
 ```
 
 ---
@@ -63,7 +63,7 @@ Run `buf dep update` to download the schema.
 
 ### Option A: Local Mode
 
-Configure `buf.gen.yaml` to use your local binary (installed via `npm install -D connect-es-errors`):
+Configure `buf.gen.yaml` to use your local binary (installed via `npm install -D connect-errors-es`):
 
 ```yaml
 # buf.gen.yaml
@@ -102,7 +102,7 @@ If you don't use Buf and rely on the standard `protoc` compiler, you can invoke 
 npx protoc \
   --es_out=gen/ts \
   --connect-es_out=gen/ts \
-  --connect-es-errors_out=gen/ts \
+  --connect-errors-es_out=gen/ts \
   --plugin=protoc-gen-connect-errors-es=./node_modules/.bin/protoc-gen-connect-errors-es \
   proto/service.proto
 ````

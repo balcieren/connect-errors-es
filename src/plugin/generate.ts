@@ -60,9 +60,9 @@ export function generate(schema: Schema) {
     const Code = f.import("Code", "@connectrpc/connect");
     const ConnectError = f.import("ConnectError", "@connectrpc/connect");
     const { create, registerAll, extractErrorCode } = {
-      create: f.import("create", "connect-es-errors"),
-      registerAll: f.import("registerAll", "connect-es-errors"),
-      extractErrorCode: f.import("extractErrorCode", "connect-es-errors"),
+      create: f.import("create", "connect-errors-es"),
+      registerAll: f.import("registerAll", "connect-errors-es"),
+      extractErrorCode: f.import("extractErrorCode", "connect-errors-es"),
     };
 
     f.print();
