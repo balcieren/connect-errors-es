@@ -1,6 +1,6 @@
 {
   "name": "connect-errors",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Proto-first, isomorphic error handling for Connect RPC — define errors in .proto, generate type-safe TypeScript constructors",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,7 +16,8 @@
     }
   },
   "bin": {
-    "protoc-gen-connect-errors-es": "./dist/plugin/bin.js"
+    "protoc-gen-connect-errors-es": "dist/plugin/bin.js",
+    "connect-errors": "dist/plugin/bin.js"
   },
   "files": [
     "dist",

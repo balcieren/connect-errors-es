@@ -86,7 +86,7 @@ plugins:
 
   # Note: If buf cannot find the plugin in your environment,
   # you can explicitly invoke it via npx:
-  # - local: ["npx", "protoc-gen-connect-errors-es"]
+  # - local: ["npx", "connect-errors"]
   #   out: gen/ts
   #   opt: target=ts
 ```
