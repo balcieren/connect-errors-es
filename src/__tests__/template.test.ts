@@ -1,10 +1,5 @@
 import { expect, test } from "vitest";
-import {
-  formatTemplate,
-  MissingFieldError,
-  templateFields,
-  validateTemplate,
-} from "../template";
+import { formatTemplate, MissingFieldError, templateFields, validateTemplate } from "../template";
 
 test("templateFields", () => {
   expect(templateFields("User '{{id}}' in {{org}}")).toEqual(["id", "org"]);

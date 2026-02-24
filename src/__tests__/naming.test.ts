@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
 import {
-    codeToConstantName,
-    codeToConstructorName,
-    codeToMatcherName,
-    codeToName,
-    codeToParamsName,
+  codeToConstantName,
+  codeToConstructorName,
+  codeToMatcherName,
+  codeToName,
+  codeToParamsName,
 } from "../plugin/naming";
 
 describe("plugin naming logic", () => {

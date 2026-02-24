@@ -5,7 +5,6 @@
 import { create, extractErrorCode, registerAll } from "connect-errors";
 import { Code, ConnectError } from "@connectrpc/connect";
 
-
 // ── Error code constants ────────────────────────────
 export const ErrUserNotFound = "ERROR_USER_NOT_FOUND" as const;
 
