@@ -137,6 +137,78 @@ When defining errors in your `.proto` file, use the following values for the `co
 | `CODE_DATA_LOSS`           | Unrecoverable data loss or corruption.                                                  |
 | `CODE_UNAUTHENTICATED`     | The request does not have valid authentication credentials.                             |
 
+## Features & Usage
+
+### Sentinel Pattern (Matching)
+
+The code generator creates a unique `Symbol` (sentinel) for each error defined in your `.proto`. You can use `matchesError` or the switch-like `matchError` utility to handle specific errors gracefully. Both helpers check headers and `ErrorInfo` details out of the box.
+
+```typescript
+import { matchError, matchesError } from "connect-errors";
+import { UserNotFoundError, RateLimitedError } from "./gen/ts/service_connect_errors";
+
+// Switch-like matching
+matchError(err, {
+  [UserNotFoundError]: () => showToast("User not found!"),
+  [RateLimitedError]: () => showToast("Please slow down."),
+});
+
+// Boolean matching
+if (matchesError(err, UserNotFoundError)) {
+  // ...
+}
+```
+
+### Protocol Buffer Details (ErrorInfo & RetryInfo)
+
+When throwing an error from the server side, `connect-errors` automatically attaches standard `google.rpc.ErrorInfo` and `google.rpc.RetryInfo` (if `retryable: true`) details to the `ConnectError`.
+
+You can extract them on the client:
+
+```typescript
+import { extractErrorInfo, extractRetryInfo } from "connect-errors";
+import { extractUserNotFoundInfo } from "./gen/ts/service_connect_errors";
+
+const errorInfo = extractErrorInfo(err);
+console.log(errorInfo?.reason); // "ERROR_USER_NOT_FOUND"
+console.log(errorInfo?.metadata); // { id: "123" }
+
+// Or use the generated typed extractor for specific errors:
+const userInfo = extractUserNotFoundInfo(err);
+if (userInfo) {
+  console.log("Missing user ID:", userInfo.metadata.id);
+}
+
+const retryInfo = extractRetryInfo(err);
+console.log(retryInfo?.retryDelay?.seconds);
+```
+
+### Header Metadata
+
+By default, the library attaches `x-error-code` and `x-retryable` HTTP headers to all created errors. This is useful for load balancers or lightweight clients that don't want to parse protobuf Any details.
+
+```typescript
+import { extractErrorCode, isRetryable, setHeaderKeys } from "connect-errors";
+
+// Optional: Override default header keys globally
+setHeaderKeys("x-custom-code", "x-custom-retry");
+
+console.log(extractErrorCode(err)); // "ERROR_USER_NOT_FOUND"
+console.log(isRetryable(err)); // true
+```
+
+### Global Interceptor
+
+You can use `createErrorInterceptor` on the server-side to centrally log or trace errors using their definitions. It only triggers on known errors registered in your proto files.
+
+```typescript
+import { createErrorInterceptor } from "connect-errors";
+
+const loggingInterceptor = createErrorInterceptor((err, def) => {
+  console.error("RPC Error:", def.code, "Retryable:", def.retryable);
+});
+```
+
 ## Compatibility
 
 | Environment        | Supported |

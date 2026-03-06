@@ -6,6 +6,7 @@ import {
   codeToConstructorName,
   codeToMatcherName,
   codeToParamsName,
+  codeToSentinelName,
 } from "./naming";
 
 // Extract {{fields}} from the message template
@@ -67,16 +68,28 @@ export function generate(schema: Schema) {
 
     const Code = f.import("Code", "@connectrpc/connect");
     const ConnectError = f.import("ConnectError", "@connectrpc/connect");
-    const { create, registerAll, extractErrorCode } = {
+    const { create, registerAll, extractErrorCode, extractErrorInfo } = {
       create: f.import("create", "connect-errors"),
       registerAll: f.import("registerAll", "connect-errors"),
       extractErrorCode: f.import("extractErrorCode", "connect-errors"),
+      extractErrorInfo: f.import("extractErrorInfo", "connect-errors"),
     };
+
+    const ErrorInfo = f.import(
+      "ErrorInfo",
+      "@buf/googleapis_googleapis.bufbuild_es/google/rpc/error_details_pb",
+    );
 
     f.print();
     f.print("// ── Error code constants ────────────────────────────");
     for (const def of errorDefs.values()) {
       f.print(`export const ${codeToConstantName(def.code)} = "${def.code}" as const;`);
+    }
+
+    f.print();
+    f.print("// ── Sentinels ───────────────────────────────────────");
+    for (const def of errorDefs.values()) {
+      f.print(`export const ${codeToSentinelName(def.code)} = Symbol("${def.code}");`);
     }
 
     f.print();
@@ -128,10 +141,26 @@ export function generate(schema: Schema) {
     f.print();
     f.print("// ── Client-side error matchers ──────────────────────");
     for (const def of errorDefs.values()) {
+      const matcherName = codeToMatcherName(def.code);
+      const infoName = matcherName.replace(/^is/, "extract").replace(/Error$/, "Info");
+
       f.print();
-      f.print("export function ", codeToMatcherName(def.code), "(err: unknown): boolean {");
+      f.print("export function ", matcherName, "(err: unknown): boolean {");
       f.print("  if (!(err instanceof ", ConnectError, ")) return false;");
-      f.print("  return ", extractErrorCode, "(err) === ", codeToConstantName(def.code), ";");
+      f.print(
+        "  if (",
+        extractErrorCode,
+        "(err) === ",
+        codeToConstantName(def.code),
+        ") return true;",
+      );
+      f.print("  const info = ", extractErrorInfo, "(err);");
+      f.print("  return info ? info.reason === ", codeToConstantName(def.code), " : false;");
+      f.print("}");
+
+      f.print();
+      f.print("export function ", infoName, "(err: unknown): ", ErrorInfo, " | undefined {");
+      f.print("  return ", matcherName, "(err) ? ", extractErrorInfo, "(err) : undefined;");
       f.print("}");
     }
   }

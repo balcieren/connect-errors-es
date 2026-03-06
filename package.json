@@ -69,6 +69,7 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
+    "@buf/googleapis_googleapis.bufbuild_es": "^2.11.0-20251126203132-004180b77378.1",
     "@bufbuild/protobuf": "^2.11.0",
     "@bufbuild/protoplugin": "^2.11.0"
   }

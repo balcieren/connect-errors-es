@@ -2,7 +2,14 @@ import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { getHeaderKeys } from "../config";
 import { create, createf, createWithMessage, wrap } from "../create";
-import { connectCode, extractErrorCode, fromError, isRetryable } from "../inspect";
+import {
+  connectCode,
+  extractErrorCode,
+  extractErrorInfo,
+  extractRetryInfo,
+  fromError,
+  isRetryable,
+} from "../inspect";
 import { clearRegistry, register } from "../registry";
 
 beforeEach(() => {
@@ -44,10 +51,21 @@ test("inspection helpers", () => {
 
   expect(extractErrorCode(err)).toBe("ERROR_USER_NOT_FOUND");
   expect(isRetryable("ERROR_USER_NOT_FOUND")).toBe(true);
+  expect(isRetryable(err)).toBe(true);
   expect(connectCode("ERROR_USER_NOT_FOUND")).toBe(Code.NotFound);
 
   const def = fromError(err);
   expect(def?.code).toBe("ERROR_USER_NOT_FOUND");
+
+  const errorInfo = extractErrorInfo(err);
+  expect(errorInfo).toBeDefined();
+  expect(errorInfo?.reason).toBe("ERROR_USER_NOT_FOUND");
+  expect(errorInfo?.domain).toBe("connecterrors");
+  expect(errorInfo?.metadata["id"]).toBe("1");
+
+  const retryInfo = extractRetryInfo(err);
+  expect(retryInfo).toBeDefined();
+  expect(retryInfo?.retryDelay?.seconds).toBe(0n);
 });
 
 test("unknown code returns internal error with default metadata", () => {

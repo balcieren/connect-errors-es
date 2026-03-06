@@ -8,8 +8,15 @@ export { getHeaderKeys, setHeaderKeys } from "./config";
 
 export { create, createWithMessage, createf, fromCode, wrap } from "./create";
 
-export { connectCode, extractErrorCode, fromError, isRetryable } from "./inspect";
+export {
+  connectCode,
+  extractErrorCode,
+  extractErrorInfo,
+  extractRetryInfo,
+  fromError,
+  isRetryable,
+} from "./inspect";
 
-export { errorInterceptor } from "./interceptor";
+export { createErrorInterceptor } from "./interceptor";
 
 export * from "./codes";

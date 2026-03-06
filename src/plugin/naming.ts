@@ -51,3 +51,11 @@ export function codeToConstantName(code: string): string {
 export function codeToParamsName(code: string): string {
   return `${codeToName(code)}Params`;
 }
+
+/**
+ * Examples:
+ * "ERROR_USER_NOT_FOUND" -> UserNotFoundError
+ */
+export function codeToSentinelName(code: string): string {
+  return `${codeToName(code)}Error`;
+}

@@ -1,7 +1,7 @@
-import { Code } from "@connectrpc/connect";
+import { Code, UnaryRequest } from "@connectrpc/connect";
 import { expect, test, vi } from "vitest";
 import { create } from "../create";
-import { errorInterceptor } from "../interceptor";
+import { createErrorInterceptor } from "../interceptor";
 import { clearRegistry, register } from "../registry";
 
 test("errorInterceptor catches ConnectError and extracts definition", async () => {
@@ -14,10 +14,10 @@ test("errorInterceptor catches ConnectError and extracts definition", async () =
   });
 
   const callback = vi.fn();
-  const interceptor = errorInterceptor(callback);
+  const interceptor = createErrorInterceptor(callback);
 
   const next = vi.fn().mockRejectedValue(create("ERR_TEST"));
-  const req = {} as any;
+  const req = {} as unknown as UnaryRequest;
 
   await expect(interceptor(next)(req)).rejects.toThrow();
 

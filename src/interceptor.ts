@@ -8,7 +8,7 @@ import { ErrorInterceptorFn } from "./types";
  *
  * This is useful for centralized logging, metrics, or tracing of custom errors.
  */
-export function errorInterceptor(fn: ErrorInterceptorFn): Interceptor {
+export function createErrorInterceptor(fn: ErrorInterceptorFn): Interceptor {
   return (next) => async (req) => {
     try {
       return await next(req);
