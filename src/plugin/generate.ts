@@ -85,8 +85,6 @@ export function generate(schema: Schema) {
       f.print(`export const ${codeToConstantName(def.code)} = "${def.code}" as const;`);
     }
 
-
-
     f.print();
     f.print("// ── Auto-register ───────────────────────────────────");
     f.print(registerAll, "([");
