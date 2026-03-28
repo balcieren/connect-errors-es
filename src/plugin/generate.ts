@@ -6,7 +6,6 @@ import {
   codeToConstructorName,
   codeToMatcherName,
   codeToParamsName,
-  codeToSentinelName,
 } from "./naming";
 
 // Extract {{fields}} from the message template
@@ -86,11 +85,7 @@ export function generate(schema: Schema) {
       f.print(`export const ${codeToConstantName(def.code)} = "${def.code}" as const;`);
     }
 
-    f.print();
-    f.print("// ── Sentinels ───────────────────────────────────────");
-    for (const def of errorDefs.values()) {
-      f.print(`export const ${codeToSentinelName(def.code)} = Symbol("${def.code}");`);
-    }
+
 
     f.print();
     f.print("// ── Auto-register ───────────────────────────────────");

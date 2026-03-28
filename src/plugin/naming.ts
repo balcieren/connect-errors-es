@@ -51,13 +51,3 @@ export function codeToConstantName(code: string): string {
 export function codeToParamsName(code: string): string {
   return `${codeToName(code)}Params`;
 }
-
-/**
- * Examples:
- * "ERROR_USER_NOT_FOUND" -> userNotFoundErrorSentinel
- */
-export function codeToSentinelName(code: string): string {
-  const name = codeToName(code);
-  const camel = name.charAt(0).toLowerCase() + name.slice(1);
-  return `${camel}ErrorSentinel`;
-}

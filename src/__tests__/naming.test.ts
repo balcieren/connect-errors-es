@@ -5,7 +5,6 @@ import {
   codeToMatcherName,
   codeToName,
   codeToParamsName,
-  codeToSentinelName,
 } from "../plugin/naming";
 
 describe("plugin naming logic", () => {
@@ -25,10 +24,6 @@ describe("plugin naming logic", () => {
 
   test("constant names", () => {
     expect(codeToConstantName("ERROR_USER_NOT_FOUND")).toBe("ErrorCodeUserNotFound");
-  });
-
-  test("sentinel names", () => {
-    expect(codeToSentinelName("ERROR_USER_NOT_FOUND")).toBe("userNotFoundErrorSentinel");
   });
 
   test("params interface names", () => {

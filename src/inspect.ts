@@ -62,10 +62,8 @@ export function connectCode(code: string): Code | null {
   return def ? def.connectCode : null;
 }
 
-export function matchesError(err: unknown, sentinel: symbol): boolean {
+export function matchesError(err: unknown, code: string): boolean {
   if (!(err instanceof ConnectError)) return false;
-  const code = sentinel.description;
-  if (!code) return false;
 
   const headerCode = extractErrorCode(err);
   if (headerCode === code) return true;
@@ -74,12 +72,12 @@ export function matchesError(err: unknown, sentinel: symbol): boolean {
   return info?.reason === code;
 }
 
-export function matchError<T>(err: unknown, matchers: { [key: symbol]: () => T }): T | undefined {
+export function matchError<T>(err: unknown, matchers: { [key: string]: () => T }): T | undefined {
   if (!(err instanceof ConnectError)) return undefined;
 
-  for (const sym of Object.getOwnPropertySymbols(matchers)) {
-    if (matchesError(err, sym)) {
-      return matchers[sym]();
+  for (const key of Object.keys(matchers)) {
+    if (matchesError(err, key)) {
+      return matchers[key]();
     }
   }
 

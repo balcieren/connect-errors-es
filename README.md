@@ -139,22 +139,22 @@ When defining errors in your `.proto` file, use the following values for the `co
 
 ## Features & Usage
 
-### Sentinel Pattern (Matching)
+### Error Matching
 
-The code generator creates a unique `Symbol` (sentinel) for each error defined in your `.proto`. You can use `matchesError` or the switch-like `matchError` utility to handle specific errors gracefully. Both helpers check headers and `ErrorInfo` details out of the box.
+The library provides `matchesError` and `matchError` (switch-like) utilities to handle specific errors gracefully. Both helpers check headers and `ErrorInfo` details out of the box using your generated `ErrorCodeXxx` constants.
 
 ```typescript
 import { matchError, matchesError } from "connect-errors";
-import { userNotFoundErrorSentinel, rateLimitedErrorSentinel } from "./gen/ts/service_connect_errors";
+import { ErrorCodeUserNotFound, ErrorCodeRateLimited } from "./gen/ts/service_connect_errors";
 
 // Switch-like matching
 matchError(err, {
-  [userNotFoundErrorSentinel]: () => showToast("User not found!"),
-  [rateLimitedErrorSentinel]: () => showToast("Please slow down."),
+  [ErrorCodeUserNotFound]: () => showToast("User not found!"),
+  [ErrorCodeRateLimited]: () => showToast("Please slow down."),
 });
 
 // Boolean matching
-if (matchesError(err, userNotFoundErrorSentinel)) {
+if (matchesError(err, ErrorCodeUserNotFound)) {
   // ...
 }
 ```
