@@ -20,12 +20,12 @@ option (connecterrors.v1.error) = {
 
 ```typescript
 // Use the generated typed constructor (server-side)
-throw newUserNotFound({ id: req.id }); // ← IDE autocomplete, compile-time checked
+throw createUserNotFoundError({ id: req.id }); // ← IDE autocomplete, compile-time checked
 ```
 
 ```typescript
 // Match errors on the client
-if (isUserNotFound(err)) {
+if (isUserNotFoundError(err)) {
   showToast("User not found!");
 }
 ```
@@ -145,16 +145,16 @@ The code generator creates a unique `Symbol` (sentinel) for each error defined i
 
 ```typescript
 import { matchError, matchesError } from "connect-errors";
-import { UserNotFoundError, RateLimitedError } from "./gen/ts/service_connect_errors";
+import { userNotFoundErrorSentinel, rateLimitedErrorSentinel } from "./gen/ts/service_connect_errors";
 
 // Switch-like matching
 matchError(err, {
-  [UserNotFoundError]: () => showToast("User not found!"),
-  [RateLimitedError]: () => showToast("Please slow down."),
+  [userNotFoundErrorSentinel]: () => showToast("User not found!"),
+  [rateLimitedErrorSentinel]: () => showToast("Please slow down."),
 });
 
 // Boolean matching
-if (matchesError(err, UserNotFoundError)) {
+if (matchesError(err, userNotFoundErrorSentinel)) {
   // ...
 }
 ```

@@ -21,27 +21,27 @@ export function codeToName(code: string): string {
 
 /**
  * Examples:
- * "ERROR_USER_NOT_FOUND" -> newUserNotFound
- * "RATE_LIMITED" -> newRateLimited
+ * "ERROR_USER_NOT_FOUND" -> createUserNotFoundError
+ * "RATE_LIMITED" -> createRateLimitedError
  */
 export function codeToConstructorName(code: string): string {
-  return `new${codeToName(code)}`;
+  return `create${codeToName(code)}Error`;
 }
 
 /**
  * Examples:
- * "ERROR_USER_NOT_FOUND" -> isUserNotFound
+ * "ERROR_USER_NOT_FOUND" -> isUserNotFoundError
  */
 export function codeToMatcherName(code: string): string {
-  return `is${codeToName(code)}`;
+  return `is${codeToName(code)}Error`;
 }
 
 /**
  * Examples:
- * "ERROR_USER_NOT_FOUND" -> ErrUserNotFound
+ * "ERROR_USER_NOT_FOUND" -> ErrorCodeUserNotFound
  */
 export function codeToConstantName(code: string): string {
-  return `Err${codeToName(code)}`;
+  return `ErrorCode${codeToName(code)}`;
 }
 
 /**
@@ -54,8 +54,10 @@ export function codeToParamsName(code: string): string {
 
 /**
  * Examples:
- * "ERROR_USER_NOT_FOUND" -> UserNotFoundError
+ * "ERROR_USER_NOT_FOUND" -> userNotFoundErrorSentinel
  */
 export function codeToSentinelName(code: string): string {
-  return `${codeToName(code)}Error`;
+  const name = codeToName(code);
+  const camel = name.charAt(0).toLowerCase() + name.slice(1);
+  return `${camel}ErrorSentinel`;
 }
