@@ -66,7 +66,7 @@
     "tsup": "^8.5.1",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@buf/googleapis_googleapis.bufbuild_es": "^2.11.0-20251126203132-004180b77378.1",
