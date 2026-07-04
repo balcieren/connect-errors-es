@@ -10,12 +10,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file test/v1/test.proto.
  */
-export const file_test_v1_test: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChJ0ZXN0L3YxL3Rlc3QucHJvdG8SB3Rlc3QudjEiHAoOR2V0VXNlclJlcXVlc3QSCgoCaWQYASABKAkiHwoPR2V0VXNlclJlc3BvbnNlEgwKBG5hbWUYASABKAkynAEKC1Rlc3RTZXJ2aWNlEowBCgdHZXRVc2VyEhcudGVzdC52MS5HZXRVc2VyUmVxdWVzdBoYLnRlc3QudjEuR2V0VXNlclJlc3BvbnNlIk6KtRhKChRFUlJPUl9VU0VSX05PVF9GT1VORBIwVXNlciB3aXRoIElEIHt7aWR9fSBub3QgZm91bmQgaW4gZGF0YWJhc2Uge3tkYn19GAVCVQoLY29tLnRlc3QudjFCCVRlc3RQcm90b1ABogIDVFhYqgIHVGVzdC5WMcoCB1Rlc3RcVjHiAhNUZXN0XFYxXEdQQk1ldGFkYXRh6gIIVGVzdDo6VjFiBnByb3RvMw",
-    [file_errors_v1_error],
-  );
+export const file_test_v1_test: GenFile = /*@__PURE__*/
+  fileDesc("ChJ0ZXN0L3YxL3Rlc3QucHJvdG8SB3Rlc3QudjEiHAoOR2V0VXNlclJlcXVlc3QSCgoCaWQYASABKAkiHwoPR2V0VXNlclJlc3BvbnNlEgwKBG5hbWUYASABKAkynAEKC1Rlc3RTZXJ2aWNlEowBCgdHZXRVc2VyEhcudGVzdC52MS5HZXRVc2VyUmVxdWVzdBoYLnRlc3QudjEuR2V0VXNlclJlc3BvbnNlIk6KtRhKChRFUlJPUl9VU0VSX05PVF9GT1VORBIwVXNlciB3aXRoIElEIHt7aWR9fSBub3QgZm91bmQgaW4gZGF0YWJhc2Uge3tkYn19GAVCVQoLY29tLnRlc3QudjFCCVRlc3RQcm90b1ABogIDVFhYqgIHVGVzdC5WMcoCB1Rlc3RcVjHiAhNUZXN0XFYxXEdQQk1ldGFkYXRh6gIIVGVzdDo6VjFiBnByb3RvMw", [file_errors_v1_error]);
 
 /**
  * @generated from message test.v1.GetUserRequest
@@ -31,8 +27,7 @@ export type GetUserRequest = Message<"test.v1.GetUserRequest"> & {
  * Describes the message test.v1.GetUserRequest.
  * Use `create(GetUserRequestSchema)` to create a new message.
  */
-export const GetUserRequestSchema: GenMessage<GetUserRequest> =
-  /*@__PURE__*/
+export const GetUserRequestSchema: GenMessage<GetUserRequest> = /*@__PURE__*/
   messageDesc(file_test_v1_test, 0);
 
 /**
@@ -49,8 +44,7 @@ export type GetUserResponse = Message<"test.v1.GetUserResponse"> & {
  * Describes the message test.v1.GetUserResponse.
  * Use `create(GetUserResponseSchema)` to create a new message.
  */
-export const GetUserResponseSchema: GenMessage<GetUserResponse> =
-  /*@__PURE__*/
+export const GetUserResponseSchema: GenMessage<GetUserResponse> = /*@__PURE__*/
   messageDesc(file_test_v1_test, 1);
 
 /**
@@ -64,5 +58,7 @@ export const TestService: GenService<{
     methodKind: "unary";
     input: typeof GetUserRequestSchema;
     output: typeof GetUserResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_test_v1_test, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_test_v1_test, 0);
+

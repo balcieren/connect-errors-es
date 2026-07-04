@@ -1,7 +1,7 @@
 import { getExtension, hasExtension } from "@bufbuild/protobuf";
 import { Schema } from "@bufbuild/protoplugin";
 import { Code as ProtoCode } from "@buf/googleapis_googleapis.bufbuild_es/google/rpc/code_pb.js";
-import { rpc_error, file_error } from "./gen/errors/v1/error_pb.js";
+import { rpc_error } from "./gen/errors/v1/error_pb.js";
 import {
   codeToConstantName,
   codeToConstructorName,
@@ -41,28 +41,7 @@ export function generate(schema: Schema) {
       }
     >();
 
-    // 1. Gather file-level errors
-    // We cast schema.targets to any[] here because the @bufbuild/protoplugin v2
-    // Target type and DescFile don't always align perfectly in all TS environments.
-    if (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (schema.targets as any[]).includes(file) &&
-      file.proto.options &&
-      hasExtension(file.proto.options, file_error)
-    ) {
-      const fileErrors = getExtension(file.proto.options, file_error);
-      for (const e of fileErrors) {
-        errorDefs.set(e.errorCode, {
-          errorCode: e.errorCode,
-          message: e.message,
-          statusCode: e.statusCode,
-          retryable: e.retryable,
-          retryDelayMs: e.retryDelayMs !== undefined ? Number(e.retryDelayMs) : 0,
-        });
-      }
-    }
-
-    // 2. Gather method-level errors
+    // 1. Gather method-level errors
     for (const service of file.services) {
       for (const method of service.methods) {
         if (method.proto.options && hasExtension(method.proto.options, rpc_error)) {

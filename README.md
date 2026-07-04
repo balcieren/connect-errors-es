@@ -11,7 +11,7 @@ The ECMAScript/TypeScript counterpart of [`connect-errors-go`](https://github.co
 
 ```protobuf
 // Define in your .proto file
-option (errors.v1.file_error) = {
+option (errors.v1.rpc_error) = {
   error_code: "ERROR_USER_NOT_FOUND"
   message: "User '{{id}}' not found"
   status_code: NOT_FOUND

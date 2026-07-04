@@ -4,7 +4,7 @@
 
 import type { GenExtension, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { extDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
-import type { FileOptions, MethodOptions } from "@bufbuild/protobuf/wkt";
+import type { MethodOptions } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_descriptor } from "@bufbuild/protobuf/wkt";
 import type { Code } from "@buf/googleapis_googleapis.bufbuild_es/google/rpc/code_pb.js";
 import { file_google_rpc_code } from "@buf/googleapis_googleapis.bufbuild_es/google/rpc/code_pb.js";
@@ -13,12 +13,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file errors/v1/error.proto.
  */
-export const file_errors_v1_error: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChVlcnJvcnMvdjEvZXJyb3IucHJvdG8SCWVycm9ycy52MSKZAQoIRXJyb3JEZWYSEgoKZXJyb3JfY29kZRgBIAEoCRIPCgdtZXNzYWdlGAIgASgJEiUKC3N0YXR1c19jb2RlGAMgASgOMhAuZ29vZ2xlLnJwYy5Db2RlEhEKCXJldHJ5YWJsZRgEIAEoCBIbCg5yZXRyeV9kZWxheV9tcxgFIAEoA0gAiAEBQhEKD19yZXRyeV9kZWxheV9tczpSCglycGNfZXJyb3ISHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjRhgMgAygLMhMuZXJyb3JzLnYxLkVycm9yRGVmUghycGNFcnJvcjpSCgpmaWxlX2Vycm9yEhwuZ29vZ2xlLnByb3RvYnVmLkZpbGVPcHRpb25zGNKGAyADKAsyEy5lcnJvcnMudjEuRXJyb3JEZWZSCWZpbGVFcnJvckKeAQoNY29tLmVycm9ycy52MUIKRXJyb3JQcm90b1ABWjxnaXRodWIuY29tL2JhbGNpZXJlbi9jb25uZWN0LWVycm9ycy1nby9wcm90by9lcnJvcnM7ZXJyb3JzcGKiAgNFWFiqAglFcnJvcnMuVjHKAglFcnJvcnNcVjHiAhVFcnJvcnNcVjFcR1BCTWV0YWRhdGHqAgpFcnJvcnM6OlYxYgZwcm90bzM",
-    [file_google_protobuf_descriptor, file_google_rpc_code],
-  );
+export const file_errors_v1_error: GenFile = /*@__PURE__*/
+  fileDesc("ChVlcnJvcnMvdjEvZXJyb3IucHJvdG8SCWVycm9ycy52MSKZAQoIRXJyb3JEZWYSEgoKZXJyb3JfY29kZRgBIAEoCRIPCgdtZXNzYWdlGAIgASgJEiUKC3N0YXR1c19jb2RlGAMgASgOMhAuZ29vZ2xlLnJwYy5Db2RlEhEKCXJldHJ5YWJsZRgEIAEoCBIbCg5yZXRyeV9kZWxheV9tcxgFIAEoA0gAiAEBQhEKD19yZXRyeV9kZWxheV9tczpSCglycGNfZXJyb3ISHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjRhgMgAygLMhMuZXJyb3JzLnYxLkVycm9yRGVmUghycGNFcnJvckKeAQoNY29tLmVycm9ycy52MUIKRXJyb3JQcm90b1ABWjxnaXRodWIuY29tL2JhbGNpZXJlbi9jb25uZWN0LWVycm9ycy1nby9wcm90by9lcnJvcnM7ZXJyb3JzcGKiAgNFWFiqAglFcnJvcnMuVjHKAglFcnJvcnNcVjHiAhVFcnJvcnNcVjFcR1BCTWV0YWRhdGHqAgpFcnJvcnM6OlYxYgZwcm90bzM", [file_google_protobuf_descriptor, file_google_rpc_code]);
 
 /**
  * ErrorDef defines a single error that can be attached to an RPC method.
@@ -68,20 +64,12 @@ export type ErrorDef = Message<"errors.v1.ErrorDef"> & {
  * Describes the message errors.v1.ErrorDef.
  * Use `create(ErrorDefSchema)` to create a new message.
  */
-export const ErrorDefSchema: GenMessage<ErrorDef> =
-  /*@__PURE__*/
+export const ErrorDefSchema: GenMessage<ErrorDef> = /*@__PURE__*/
   messageDesc(file_errors_v1_error, 0);
 
 /**
  * @generated from extension: repeated errors.v1.ErrorDef rpc_error = 50001;
  */
-export const rpc_error: GenExtension<MethodOptions, ErrorDef[]> =
-  /*@__PURE__*/
+export const rpc_error: GenExtension<MethodOptions, ErrorDef[]> = /*@__PURE__*/
   extDesc(file_errors_v1_error, 0);
 
-/**
- * @generated from extension: repeated errors.v1.ErrorDef file_error = 50002;
- */
-export const file_error: GenExtension<FileOptions, ErrorDef[]> =
-  /*@__PURE__*/
-  extDesc(file_errors_v1_error, 1);
