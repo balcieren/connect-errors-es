@@ -8,11 +8,19 @@ import {
   codeToParamsName,
 } from "./naming";
 
-// Extract {{fields}} from the message template
-function extractTemplateFields(tpl: string): string[] {
+// extractTemplateFields parses {{placeholder}} names from the message template.
+// Returns unique fields in order of first appearance. Invalid field names
+// (containing characters other than [a-zA-Z0-9_]) are silently skipped.
+export function extractTemplateFields(tpl: string): string[] {
   const matches = tpl.match(/\{\{([^{}]+)\}\}/g);
   if (!matches) return [];
-  return Array.from(new Set(matches.map((m) => m.slice(2, -2))));
+  return Array.from(
+    new Set(
+      matches
+        .map((m) => m.slice(2, -2).trim())
+        .filter((field) => field !== "" && /^[a-zA-Z0-9_]+$/.test(field)),
+    ),
+  );
 }
 
 export function generate(schema: Schema) {
@@ -28,6 +36,7 @@ export function generate(schema: Schema) {
         message: string;
         connectCode: ProtoCode;
         retryable: boolean;
+        retryDelayMs: number;
       }
     >();
 
@@ -42,7 +51,13 @@ export function generate(schema: Schema) {
     ) {
       const fileErrors = getExtension(file.proto.options, error);
       for (const e of fileErrors) {
-        errorDefs.set(e.code, e);
+        errorDefs.set(e.code, {
+          code: e.code,
+          message: e.message,
+          connectCode: e.connectCode,
+          retryable: e.retryable,
+          retryDelayMs: e.retryDelayMs !== undefined ? Number(e.retryDelayMs) : 0,
+        });
       }
     }
 
@@ -52,7 +67,13 @@ export function generate(schema: Schema) {
         if (method.proto.options && hasExtension(method.proto.options, connect_error)) {
           const methodErrors = getExtension(method.proto.options, connect_error);
           for (const e of methodErrors) {
-            errorDefs.set(e.code, e);
+            errorDefs.set(e.code, {
+              code: e.code,
+              message: e.message,
+              connectCode: e.connectCode,
+              retryable: e.retryable,
+              retryDelayMs: e.retryDelayMs !== undefined ? Number(e.retryDelayMs) : 0,
+            });
           }
         }
       }
@@ -92,12 +113,19 @@ export function generate(schema: Schema) {
       f.print("  {");
       f.print("    code: ", codeToConstantName(def.code), ",");
       f.print("    messageTpl: ", JSON.stringify(def.message), ",");
-      const connectCodeName = ProtoCode[def.connectCode]
-        .split("_")
-        .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
-        .join("");
+      const rawCodeName = ProtoCode[def.connectCode] ?? "UNSPECIFIED";
+      const connectCodeName =
+        rawCodeName === "UNSPECIFIED"
+          ? "Unknown"
+          : rawCodeName
+              .split("_")
+              .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+              .join("");
       f.print("    connectCode: ", Code, ".", connectCodeName, ",");
       f.print("    retryable: ", def.retryable, ",");
+      if (def.retryDelayMs > 0) {
+        f.print("    retryDelayMs: ", def.retryDelayMs, ",");
+      }
       f.print("  },");
     }
     f.print("]);");
