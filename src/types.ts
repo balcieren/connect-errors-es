@@ -7,6 +7,7 @@ export interface ErrorDefinition {
   messageTpl: string;
   connectCode: Code;
   retryable: boolean;
+  retryDelayMs?: number;
 }
 
 export type ErrorInterceptorFn = (err: ConnectError, def: ErrorDefinition) => void;

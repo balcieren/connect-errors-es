@@ -15,7 +15,9 @@ export class MissingFieldError extends Error {
 export function templateFields(tpl: string): string[] {
   const matches = tpl.match(/\{\{([^{}]+)\}\}/g);
   if (!matches) return [];
-  return Array.from(new Set(matches.map((m) => m.slice(2, -2))));
+  const fields = Array.from(new Set(matches.map((m) => m.slice(2, -2))));
+  fields.sort();
+  return fields;
 }
 
 export function validateTemplate(tpl: string, data?: M): void {

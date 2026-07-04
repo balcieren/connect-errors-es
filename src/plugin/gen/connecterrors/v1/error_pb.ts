@@ -11,12 +11,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file connecterrors/v1/error.proto.
  */
-export const file_connecterrors_v1_error: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "Chxjb25uZWN0ZXJyb3JzL3YxL2Vycm9yLnByb3RvEhBjb25uZWN0ZXJyb3JzLnYxImoKCEVycm9yRGVmEgwKBGNvZGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCRIsCgxjb25uZWN0X2NvZGUYAyABKA4yFi5jb25uZWN0ZXJyb3JzLnYxLkNvZGUSEQoJcmV0cnlhYmxlGAQgASgIKpQDCgRDb2RlEhQKEENPREVfVU5TUEVDSUZJRUQQABIRCg1DT0RFX0NBTkNFTEVEEAESEAoMQ09ERV9VTktOT1dOEAISGQoVQ09ERV9JTlZBTElEX0FSR1VNRU5UEAMSGgoWQ09ERV9ERUFETElORV9FWENFRURFRBAEEhIKDkNPREVfTk9UX0ZPVU5EEAUSFwoTQ09ERV9BTFJFQURZX0VYSVNUUxAGEhoKFkNPREVfUEVSTUlTU0lPTl9ERU5JRUQQBxIbChdDT0RFX1JFU09VUkNFX0VYSEFVU1RFRBAIEhwKGENPREVfRkFJTEVEX1BSRUNPTkRJVElPThAJEhAKDENPREVfQUJPUlRFRBAKEhUKEUNPREVfT1VUX09GX1JBTkdFEAsSFgoSQ09ERV9VTklNUExFTUVOVEVEEAwSEQoNQ09ERV9JTlRFUk5BTBANEhQKEENPREVfVU5BVkFJTEFCTEUQDhISCg5DT0RFX0RBVEFfTE9TUxAPEhgKFENPREVfVU5BVVRIRU5USUNBVEVEEBA6YQoNY29ubmVjdF9lcnJvchIeLmdvb2dsZS5wcm90b2J1Zi5NZXRob2RPcHRpb25zGNGGAyADKAsyGi5jb25uZWN0ZXJyb3JzLnYxLkVycm9yRGVmUgxjb25uZWN0RXJyb3I6UAoFZXJyb3ISHC5nb29nbGUucHJvdG9idWYuRmlsZU9wdGlvbnMY0oYDIAMoCzIaLmNvbm5lY3RlcnJvcnMudjEuRXJyb3JEZWZSBWVycm9yQs8BChRjb20uY29ubmVjdGVycm9ycy52MUIKRXJyb3JQcm90b1ABWkpnaXRodWIuY29tL2JhbGNpZXJlbi9jb25uZWN0LWVycm9ycy1nby9wcm90by9jb25uZWN0ZXJyb3JzO2Nvbm5lY3RlcnJvcnNwYqICA0NYWKoCEENvbm5lY3RlcnJvcnMuVjHKAhBDb25uZWN0ZXJyb3JzXFYx4gIcQ29ubmVjdGVycm9yc1xWMVxHUEJNZXRhZGF0YeoCEUNvbm5lY3RlcnJvcnM6OlYxYgZwcm90bzM",
-    [file_google_protobuf_descriptor],
-  );
+export const file_connecterrors_v1_error: GenFile = /*@__PURE__*/
+  fileDesc("Chxjb25uZWN0ZXJyb3JzL3YxL2Vycm9yLnByb3RvEhBjb25uZWN0ZXJyb3JzLnYxIpoBCghFcnJvckRlZhIMCgRjb2RlGAEgASgJEg8KB21lc3NhZ2UYAiABKAkSLAoMY29ubmVjdF9jb2RlGAMgASgOMhYuY29ubmVjdGVycm9ycy52MS5Db2RlEhEKCXJldHJ5YWJsZRgEIAEoCBIbCg5yZXRyeV9kZWxheV9tcxgFIAEoA0gAiAEBQhEKD19yZXRyeV9kZWxheV9tcyqUAwoEQ29kZRIUChBDT0RFX1VOU1BFQ0lGSUVEEAASEQoNQ09ERV9DQU5DRUxFRBABEhAKDENPREVfVU5LTk9XThACEhkKFUNPREVfSU5WQUxJRF9BUkdVTUVOVBADEhoKFkNPREVfREVBRExJTkVfRVhDRUVERUQQBBISCg5DT0RFX05PVF9GT1VORBAFEhcKE0NPREVfQUxSRUFEWV9FWElTVFMQBhIaChZDT0RFX1BFUk1JU1NJT05fREVOSUVEEAcSGwoXQ09ERV9SRVNPVVJDRV9FWEhBVVNURUQQCBIcChhDT0RFX0ZBSUxFRF9QUkVDT05ESVRJT04QCRIQCgxDT0RFX0FCT1JURUQQChIVChFDT0RFX09VVF9PRl9SQU5HRRALEhYKEkNPREVfVU5JTVBMRU1FTlRFRBAMEhEKDUNPREVfSU5URVJOQUwQDRIUChBDT0RFX1VOQVZBSUxBQkxFEA4SEgoOQ09ERV9EQVRBX0xPU1MQDxIYChRDT0RFX1VOQVVUSEVOVElDQVRFRBAQOmEKDWNvbm5lY3RfZXJyb3ISHi5nb29nbGUucHJvdG9idWYuTWV0aG9kT3B0aW9ucxjRhgMgAygLMhouY29ubmVjdGVycm9ycy52MS5FcnJvckRlZlIMY29ubmVjdEVycm9yOlAKBWVycm9yEhwuZ29vZ2xlLnByb3RvYnVmLkZpbGVPcHRpb25zGNKGAyADKAsyGi5jb25uZWN0ZXJyb3JzLnYxLkVycm9yRGVmUgVlcnJvckLPAQoUY29tLmNvbm5lY3RlcnJvcnMudjFCCkVycm9yUHJvdG9QAVpKZ2l0aHViLmNvbS9iYWxjaWVyZW4vY29ubmVjdC1lcnJvcnMtZ28vcHJvdG8vY29ubmVjdGVycm9ycztjb25uZWN0ZXJyb3JzcGKiAgNDWFiqAhBDb25uZWN0ZXJyb3JzLlYxygIQQ29ubmVjdGVycm9yc1xWMeICHENvbm5lY3RlcnJvcnNcVjFcR1BCTWV0YWRhdGHqAhFDb25uZWN0ZXJyb3JzOjpWMWIGcHJvdG8z", [file_google_protobuf_descriptor]);
 
 /**
  * ErrorDef defines a single error that can be attached to an RPC method.
@@ -52,14 +48,21 @@ export type ErrorDef = Message<"connecterrors.v1.ErrorDef"> & {
    * @generated from field: bool retryable = 4;
    */
   retryable: boolean;
+
+  /**
+   * Retry delay in milliseconds. If set, google.rpc.RetryInfo will use this delay
+   * instead of the default zero delay. Only meaningful when retryable is true.
+   *
+   * @generated from field: optional int64 retry_delay_ms = 5;
+   */
+  retryDelayMs?: bigint;
 };
 
 /**
  * Describes the message connecterrors.v1.ErrorDef.
  * Use `create(ErrorDefSchema)` to create a new message.
  */
-export const ErrorDefSchema: GenMessage<ErrorDef> =
-  /*@__PURE__*/
+export const ErrorDefSchema: GenMessage<ErrorDef> = /*@__PURE__*/
   messageDesc(file_connecterrors_v1_error, 0);
 
 /**
@@ -157,18 +160,18 @@ export enum Code {
 /**
  * Describes the enum connecterrors.v1.Code.
  */
-export const CodeSchema: GenEnum<Code> = /*@__PURE__*/ enumDesc(file_connecterrors_v1_error, 0);
+export const CodeSchema: GenEnum<Code> = /*@__PURE__*/
+  enumDesc(file_connecterrors_v1_error, 0);
 
 /**
  * @generated from extension: repeated connecterrors.v1.ErrorDef connect_error = 50001;
  */
-export const connect_error: GenExtension<MethodOptions, ErrorDef[]> =
-  /*@__PURE__*/
+export const connect_error: GenExtension<MethodOptions, ErrorDef[]> = /*@__PURE__*/
   extDesc(file_connecterrors_v1_error, 0);
 
 /**
  * @generated from extension: repeated connecterrors.v1.ErrorDef error = 50002;
  */
-export const error: GenExtension<FileOptions, ErrorDef[]> =
-  /*@__PURE__*/
+export const error: GenExtension<FileOptions, ErrorDef[]> = /*@__PURE__*/
   extDesc(file_connecterrors_v1_error, 1);
+

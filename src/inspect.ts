@@ -28,13 +28,7 @@ export function extractErrorCode(err: unknown): string | undefined {
 
   const { codeKey } = getHeaderKeys();
   const code = err.metadata.get(codeKey);
-  if (code) {
-    return code;
-  }
-
-  // Fallback to searching trailers if headers lack context (some transports merge them or place them in trailers only)
-  // Connect headers and trailers are merged in metadata, so metadata.get() checks both.
-  return undefined;
+  return code ?? undefined;
 }
 
 export function fromError(err: unknown): ErrorDefinition | null {

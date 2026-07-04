@@ -2,11 +2,12 @@ export type { ErrorDefinition, ErrorInterceptorFn, M } from "./types";
 
 export { MissingFieldError, formatTemplate, templateFields, validateTemplate } from "./template";
 
-export { lookup, register, registerAll } from "./registry";
+export { lookup, register, registerAll, codes } from "./registry";
 
-export { getHeaderKeys, setHeaderKeys } from "./config";
+export { getDomain, getHeaderKeys, setDomain, setHeaderKeys } from "./config";
 
-export { create, createWithMessage, createf, fromCode, wrap } from "./create";
+export { create, createWithMessage, createWithRetry, createf, fromCode, wrap, withFieldViolation, setErrorLogger, setValidationLogger } from "./create";
+export type { ErrorLogger, ValidationLogger } from "./create";
 
 export {
   connectCode,
@@ -15,8 +16,15 @@ export {
   extractRetryInfo,
   fromError,
   isRetryable,
+  matchError,
+  matchesError,
 } from "./inspect";
 
 export { createErrorInterceptor } from "./interceptor";
+
+export { ErrorBuilder, createBuilder, createCtx, setContextExtractor } from "./builder";
+
+export type { ProblemDetails } from "./problem-details";
+export { toProblemDetails } from "./problem-details";
 
 export * from "./codes";

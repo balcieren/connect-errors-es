@@ -21,7 +21,7 @@ registerAll([
   {
     code: ErrNotFound,
     connectCode: Code.NotFound,
-    messageTpl: "Not found",
+    messageTpl: "Resource not found",
     retryable: false,
   },
   {
@@ -33,7 +33,7 @@ registerAll([
   {
     code: ErrAlreadyExists,
     connectCode: Code.AlreadyExists,
-    messageTpl: "Already exists",
+    messageTpl: "Resource already exists",
     retryable: false,
   },
   {
@@ -45,13 +45,13 @@ registerAll([
   {
     code: ErrUnauthenticated,
     connectCode: Code.Unauthenticated,
-    messageTpl: "Unauthenticated",
+    messageTpl: "Authentication required",
     retryable: false,
   },
   {
     code: ErrInternal,
     connectCode: Code.Internal,
-    messageTpl: "Internal system error",
+    messageTpl: "Internal server error",
     retryable: false,
   },
   {
@@ -81,31 +81,31 @@ registerAll([
   {
     code: ErrAborted,
     connectCode: Code.Aborted,
-    messageTpl: "Aborted",
+    messageTpl: "Operation aborted",
     retryable: true,
   },
   {
     code: ErrOutOfRange,
     connectCode: Code.OutOfRange,
-    messageTpl: "Out of range",
+    messageTpl: "Value out of range",
     retryable: false,
   },
   {
     code: ErrUnimplemented,
     connectCode: Code.Unimplemented,
-    messageTpl: "Unimplemented",
+    messageTpl: "Operation not implemented",
     retryable: false,
   },
   {
     code: ErrCanceled,
     connectCode: Code.Canceled,
-    messageTpl: "Canceled",
+    messageTpl: "RPC canceled",
     retryable: false,
   },
   {
     code: ErrDataLoss,
     connectCode: Code.DataLoss,
-    messageTpl: "Data loss",
+    messageTpl: "Unrecoverable data loss",
     retryable: false,
   },
 ]);
