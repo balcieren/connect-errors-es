@@ -9,7 +9,7 @@ export interface ProblemDetails {
   instance?: string;
 }
 
-const connectCodeToHTTPStatus: Record<Code, number> = {
+const statusCodeToHTTPStatus: Record<Code, number> = {
   [Code.Canceled]: 499,
   [Code.Unknown]: 500,
   [Code.InvalidArgument]: 400,
@@ -36,7 +36,7 @@ export function toProblemDetails(err: unknown): ProblemDetails | undefined {
   const pd: ProblemDetails = {
     type: "about:blank",
     detail: err.rawMessage,
-    status: connectCodeToHTTPStatus[err.code] ?? 500,
+    status: statusCodeToHTTPStatus[err.code] ?? 500,
   };
 
   const code = extractErrorCode(err);
