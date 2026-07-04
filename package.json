@@ -61,13 +61,13 @@
     "@connectrpc/connect": "^2.0.0",
     "@eslint/js": "^9.0.0",
     "@types/node": "^20.0.0",
-    "@vitest/coverage-v8": "^3.2.6",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^10.0.2",
     "prettier": "^3.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "@buf/googleapis_googleapis.bufbuild_es": "^2.11.0-20251126203132-004180b77378.1",
