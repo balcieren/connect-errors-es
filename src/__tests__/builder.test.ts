@@ -20,9 +20,7 @@ describe("ErrorBuilder", () => {
   });
 
   test("withRetryDelay sets retry delay", () => {
-    const err = createBuilder("ERROR_UNAVAILABLE")
-      .withRetryDelay(5000)
-      .build();
+    const err = createBuilder("ERROR_UNAVAILABLE").withRetryDelay(5000).build();
 
     const retry = extractRetryInfo(err);
     expect(retry).toBeDefined();
@@ -53,9 +51,7 @@ describe("ErrorBuilder", () => {
   });
 
   test("withMessage alone on retryable error keeps default retry info", () => {
-    const err = createBuilder("ERROR_UNAVAILABLE")
-      .withMessage("Retry later")
-      .build();
+    const err = createBuilder("ERROR_UNAVAILABLE").withMessage("Retry later").build();
 
     expect(err.message).toContain("Retry later");
     // Default retryDelayMs is 0 for ErrUnavailable

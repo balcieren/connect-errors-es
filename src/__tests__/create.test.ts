@@ -1,9 +1,9 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { getHeaderKeys } from "../config";
-import { create, createf, createWithMessage, wrap } from "../create";
+import { create, createf, createWithMessage, wrap, fromCode, setValidationLogger } from "../create";
 import {
-  connectCode,
+  statusCode,
   extractErrorCode,
   extractErrorInfo,
   extractRetryInfo,
@@ -15,8 +15,8 @@ import { clearRegistry, register } from "../registry";
 beforeEach(() => {
   clearRegistry();
   register({
-    code: "ERROR_USER_NOT_FOUND",
-    connectCode: Code.NotFound,
+    errorCode: "ERROR_USER_NOT_FOUND",
+    statusCode: Code.NotFound,
     messageTpl: "User '{{id}}' not found",
     retryable: true,
   });
@@ -52,10 +52,10 @@ test("inspection helpers", () => {
   expect(extractErrorCode(err)).toBe("ERROR_USER_NOT_FOUND");
   expect(isRetryable("ERROR_USER_NOT_FOUND")).toBe(true);
   expect(isRetryable(err)).toBe(true);
-  expect(connectCode("ERROR_USER_NOT_FOUND")).toBe(Code.NotFound);
+  expect(statusCode("ERROR_USER_NOT_FOUND")).toBe(Code.NotFound);
 
   const def = fromError(err);
-  expect(def?.code).toBe("ERROR_USER_NOT_FOUND");
+  expect(def?.errorCode).toBe("ERROR_USER_NOT_FOUND");
 
   const errorInfo = extractErrorInfo(err);
   expect(errorInfo).toBeDefined();
@@ -85,4 +85,29 @@ test("wrap with unknown code", () => {
   expect(err.code).toBe(Code.Internal);
   expect(err.cause).toBe(inner);
   expect(extractErrorCode(err)).toBe("ABSENT");
+});
+
+test("fromCode creates ConnectError directly", () => {
+  const err = fromCode(Code.Unavailable, "service down");
+  expect(err).toBeInstanceOf(ConnectError);
+  expect(err.code).toBe(Code.Unavailable);
+  expect(err.rawMessage).toBe("service down");
+});
+
+test("wrap with missing template parameters triggers validation logger", () => {
+  let loggedCode = "";
+  let loggedErr: Error | undefined;
+  setValidationLogger((code: string, data: Record<string, string> | undefined, err: Error) => {
+    loggedCode = code;
+    loggedErr = err;
+  });
+
+  const inner = new Error("db error");
+  wrap("ERROR_USER_NOT_FOUND", inner, {}); // missing "id" placeholder
+
+  expect(loggedCode).toBe("ERROR_USER_NOT_FOUND");
+  expect(loggedErr).toBeDefined();
+  expect(loggedErr?.message).toContain("Missing template fields: id");
+
+  setValidationLogger(() => {});
 });

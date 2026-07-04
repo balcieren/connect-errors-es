@@ -3,9 +3,9 @@ import { Code, ConnectError } from "@connectrpc/connect";
 export type M = Record<string, string>;
 
 export interface ErrorDefinition {
-  code: string;
+  errorCode: string;
   messageTpl: string;
-  connectCode: Code;
+  statusCode: Code;
   retryable: boolean;
   retryDelayMs?: number;
 }

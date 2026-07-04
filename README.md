@@ -34,20 +34,20 @@ if (isUserNotFoundError(err)) {
 
 ## Features
 
-| Feature                       | Description                                                    |
-| ----------------------------- | -------------------------------------------------------------- |
-| 🔧 **Proto-first**            | Errors live in `.proto` files next to your service definitions |
+| Feature                       | Description                                                     |
+| ----------------------------- | --------------------------------------------------------------- |
+| 🔧 **Proto-first**            | Errors live in `.proto` files next to your service definitions  |
 | ⚡ **Generated Constructors** | `createXxxError(XxxParams)` — fully typed, zero string literals |
-| 🎯 **Compile-time safe**      | `ErrorCodeXxx` constants + typed params catch all typos        |
-| 📝 **Template Messages**      | `{{placeholder}}` → typed params, validated at runtime         |
-| 🔄 **Retryable Errors**       | Mark errors as retryable with custom retry delays in proto     |
-| 🪝 **Interceptor**            | Server-side hook for logging, metrics, and tracing             |
-| 🔀 **Error Matching**         | `matchesError` + `matchError` (switch-like)                    |
+| 🎯 **Compile-time safe**      | `ErrorCodeXxx` constants + typed params catch all typos         |
+| 📝 **Template Messages**      | `{{placeholder}}` → typed params, validated at runtime          |
+| 🔄 **Retryable Errors**       | Mark errors as retryable with custom retry delays in proto      |
+| 🪝 **Interceptor**            | Server-side hook for logging, metrics, and tracing              |
+| 🔀 **Error Matching**         | `matchesError` + `matchError` (switch-like)                     |
 | 🔨 **Error Builder**          | Chainable API: `.withFieldViolation().withRetryDelay().build()` |
-| 🌐 **RFC 7807**               | `toProblemDetails()` for REST/HTTP adapters                    |
-| 🏷️ **Configurable Domain**    | `setDomain("myapp")` for `google.rpc.ErrorInfo`               |
-| 🧩 **Context-aware**          | `createCtx()` + `setContextExtractor()` for trace IDs, etc.    |
-| 📋 **Registry Introspection** | `codes()` returns sorted list of all registered error codes    |
+| 🌐 **RFC 7807**               | `toProblemDetails()` for REST/HTTP adapters                     |
+| 🏷️ **Configurable Domain**    | `setDomain("myapp")` for `google.rpc.ErrorInfo`                 |
+| 🧩 **Context-aware**          | `createCtx()` + `setContextExtractor()` for trace IDs, etc.     |
+| 📋 **Registry Introspection** | `codes()` returns sorted list of all registered error codes     |
 
 ## Quick Start
 
@@ -141,7 +141,7 @@ When defining errors in your `.proto` file, use the following values for the `st
 | `UNKNOWN`             | Unknown error.                                                                          |
 | `INVALID_ARGUMENT`    | Client specified an invalid argument.                                                   |
 | `DEADLINE_EXCEEDED`   | Deadline expired before operation could complete.                                       |
-| `NOT_FOUND`         | Some requested entity was not found.                                                    |
+| `NOT_FOUND`           | Some requested entity was not found.                                                    |
 | `ALREADY_EXISTS`      | Some entity that we attempted to create already exists.                                 |
 | `PERMISSION_DENIED`   | The caller does not have permission to execute the operation.                           |
 | `RESOURCE_EXHAUSTED`  | Some resource has been exhausted (e.g. per-user quota).                                 |
@@ -263,8 +263,8 @@ Both default to no-op. Configure them to integrate with your logging/monitoring 
 import { setErrorLogger, setValidationLogger } from "connect-errors";
 
 // Log all errors
-setErrorLogger((code, connectCode, retryable, data) => {
-  console.log("error created", { code, connectCode, retryable, data });
+setErrorLogger((code, statusCode, retryable, data) => {
+  console.log("error created", { code, statusCode, retryable, data });
 });
 
 // Log validation failures
@@ -278,14 +278,16 @@ setValidationLogger((code, data, err) => {
 ```typescript
 // Winston
 import winston from "winston";
-const logger = winston.createLogger({ /* ... */ });
-setErrorLogger((code, connectCode, retryable, data) => {
-  logger.info("error created", { code, connectCode, retryable, data });
+const logger = winston.createLogger({
+  /* ... */
+});
+setErrorLogger((code, statusCode, retryable, data) => {
+  logger.info("error created", { code, statusCode, retryable, data });
 });
 
 // Sentry
 import * as Sentry from "@sentry/node";
-setErrorLogger((code, connectCode, retryable, data) => {
+setErrorLogger((code, statusCode, retryable, data) => {
   Sentry.withScope((scope) => {
     scope.setTag("error_code", code);
     scope.setContext("data", data);
@@ -294,8 +296,8 @@ setErrorLogger((code, connectCode, retryable, data) => {
 });
 
 // Prometheus metrics
-setErrorLogger((code, connectCode, retryable, data) => {
-  errorsCreatedCounter.inc({ code, connect_code: connectCode });
+setErrorLogger((code, statusCode, retryable, data) => {
+  errorsCreatedCounter.inc({ code, status_code: statusCode });
 });
 ```
 
@@ -307,7 +309,7 @@ You can use `createErrorInterceptor` on the server-side to centrally log or trac
 import { createErrorInterceptor } from "connect-errors";
 
 const loggingInterceptor = createErrorInterceptor((err, def) => {
-  console.error("RPC Error:", def.code, "Retryable:", def.retryable);
+  console.error("RPC Error:", def.errorCode, "Retryable:", def.retryable);
 });
 ```
 
@@ -326,60 +328,60 @@ console.log(codes()); // ["ERROR_NOT_FOUND", "ERROR_INTERNAL", ...]
 
 ### Error Creation
 
-| Function                          | Description                                   |
-| --------------------------------- | --------------------------------------------- |
-| `create(code, data?)`             | Create error from registry with template data |
-| `createWithMessage(code, message, data?)` | Override default template message     |
-| `createf(code, format, ...args)`  | Format-string style error creation            |
-| `wrap(code, cause, data?)`        | Wrap underlying error with context            |
-| `fromCode(connectCode, message)`  | Create directly from connect `Code`           |
-| `createWithRetry(code, data, delayMs)` | Create error with custom retry delay     |
-| `createCtx(ctx, code, data?)`     | Create error with context-extracted metadata  |
-| `createBuilder(code, data?)`      | Chainable builder for complex errors          |
-| `withFieldViolation(err, field, msg)` | Add `google.rpc.BadRequest` FieldViolation |
+| Function                                  | Description                                   |
+| ----------------------------------------- | --------------------------------------------- |
+| `create(code, data?)`                     | Create error from registry with template data |
+| `createWithMessage(code, message, data?)` | Override default template message             |
+| `createf(code, format, ...args)`          | Format-string style error creation            |
+| `wrap(code, cause, data?)`                | Wrap underlying error with context            |
+| `fromCode(statusCode, message)`           | Create directly from connect `Code`           |
+| `createWithRetry(code, data, delayMs)`    | Create error with custom retry delay          |
+| `createCtx(ctx, code, data?)`             | Create error with context-extracted metadata  |
+| `createBuilder(code, data?)`              | Chainable builder for complex errors          |
+| `withFieldViolation(err, field, msg)`     | Add `google.rpc.BadRequest` FieldViolation    |
 
 ### Error Inspection
 
-| Function                       | Description                              |
-| ------------------------------ | ---------------------------------------- |
-| `fromError(err)`               | Extract `ErrorDefinition` from metadata  |
-| `extractErrorCode(err)`        | Get just the error code string           |
-| `extractErrorInfo(err)`        | Extract `google.rpc.ErrorInfo` detail    |
-| `extractRetryInfo(err)`        | Extract `google.rpc.RetryInfo` detail    |
-| `isRetryable(codeOrErr)`       | Check if an error code or error is retryable |
-| `connectCode(code)`            | Get the connect `Code` for an error code |
-| `matchesError(err, code)`      | Check if an error matches a code         |
-| `matchError(err, matchers)`    | Switch-like error matching               |
-| `toProblemDetails(err)`        | Convert to RFC 7807 Problem Details      |
+| Function                    | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| `fromError(err)`            | Extract `ErrorDefinition` from metadata      |
+| `extractErrorCode(err)`     | Get just the error code string               |
+| `extractErrorInfo(err)`     | Extract `google.rpc.ErrorInfo` detail        |
+| `extractRetryInfo(err)`     | Extract `google.rpc.RetryInfo` detail        |
+| `isRetryable(codeOrErr)`    | Check if an error code or error is retryable |
+| `statusCode(code)`          | Get the connect `Code` for an error code     |
+| `matchesError(err, code)`   | Check if an error matches a code             |
+| `matchError(err, matchers)` | Switch-like error matching                   |
+| `toProblemDetails(err)`     | Convert to RFC 7807 Problem Details          |
 
 ### Registry
 
-| Function            | Description                                 |
-| ------------------- | ------------------------------------------- |
-| `register(def)`     | Register an error definition                |
-| `registerAll(defs)` | Register multiple error definitions         |
-| `lookup(code)`      | Look up an error definition by code         |
-| `codes()`           | Return sorted list of all registered codes  |
+| Function            | Description                                |
+| ------------------- | ------------------------------------------ |
+| `register(def)`     | Register an error definition               |
+| `registerAll(defs)` | Register multiple error definitions        |
+| `lookup(code)`      | Look up an error definition by code        |
+| `codes()`           | Return sorted list of all registered codes |
 
 ### Configuration
 
-| Function                         | Description                                   |
-| -------------------------------- | --------------------------------------------- |
-| `setHeaderKeys(codeKey, retryableKey)` | Customize metadata header keys          |
-| `getHeaderKeys()`                | Get current header keys                       |
-| `setDomain(domain)`              | Configure global error domain                 |
-| `getDomain()`                    | Get the current error domain                  |
-| `setContextExtractor(fn)`        | Configure context-to-metadata extraction      |
-| `setErrorLogger(fn)`             | Configure logger for all error creations      |
-| `setValidationLogger(fn)`        | Configure logger for template validation failures |
+| Function                               | Description                                       |
+| -------------------------------------- | ------------------------------------------------- |
+| `setHeaderKeys(codeKey, retryableKey)` | Customize metadata header keys                    |
+| `getHeaderKeys()`                      | Get current header keys                           |
+| `setDomain(domain)`                    | Configure global error domain                     |
+| `getDomain()`                          | Get the current error domain                      |
+| `setContextExtractor(fn)`              | Configure context-to-metadata extraction          |
+| `setErrorLogger(fn)`                   | Configure logger for all error creations          |
+| `setValidationLogger(fn)`              | Configure logger for template validation failures |
 
 ### Template Utilities
 
 ```typescript
 import { templateFields, validateTemplate, formatTemplate } from "connect-errors";
 
-templateFields("User '{{id}}' in {{org}}");     // → ["id", "org"]
-validateTemplate("User '{{id}}'", {});           // → throws MissingFieldError
+templateFields("User '{{id}}' in {{org}}"); // → ["id", "org"]
+validateTemplate("User '{{id}}'", {}); // → throws MissingFieldError
 formatTemplate("User '{{id}}'", { id: "123" }); // → "User '123'"
 ```
 
@@ -397,13 +399,13 @@ const err = createBuilder("ERROR_INVALID_ARGUMENT", { reason: "bad" })
   .build();
 ```
 
-| Method | Description |
-| --- | --- |
-| `withDetail(detail)` | Add a protobuf detail |
-| `withRetryDelay(ms)` | Set retry delay in milliseconds |
-| `withFieldViolation(field, msg)` | Add field violation |
-| `withMessage(msg)` | Override template message |
-| `build()` | Build the ConnectError |
+| Method                           | Description                     |
+| -------------------------------- | ------------------------------- |
+| `withDetail(detail)`             | Add a protobuf detail           |
+| `withRetryDelay(ms)`             | Set retry delay in milliseconds |
+| `withFieldViolation(field, msg)` | Add field violation             |
+| `withMessage(msg)`               | Override template message       |
+| `build()`                        | Build the ConnectError          |
 
 ### Types
 
@@ -411,9 +413,9 @@ const err = createBuilder("ERROR_INVALID_ARGUMENT", { reason: "bad" })
 type M = Record<string, string>;
 
 interface ErrorDefinition {
-  code: string;
+  errorCode: string;
   messageTpl: string;
-  connectCode: Code;
+  statusCode: Code;
   retryable: boolean;
   retryDelayMs?: number;
 }
@@ -444,24 +446,24 @@ import { Code } from "@connectrpc/connect";
 
 // Register a single error
 register({
-  code: "ERROR_EMAIL_TAKEN",
+  errorCode: "ERROR_EMAIL_TAKEN",
   messageTpl: "Email '{{email}}' is taken",
-  connectCode: Code.AlreadyExists,
+  statusCode: Code.AlreadyExists,
   retryable: false,
 });
 
 // Register multiple errors
 registerAll([
   {
-    code: "ERROR_USER_NOT_FOUND",
+    errorCode: "ERROR_USER_NOT_FOUND",
     messageTpl: "User '{{id}}' not found",
-    connectCode: Code.NotFound,
+    statusCode: Code.NotFound,
     retryable: false,
   },
   {
-    code: "ERROR_RATE_LIMITED",
+    errorCode: "ERROR_RATE_LIMITED",
     messageTpl: "Too many requests",
-    connectCode: Code.ResourceExhausted,
+    statusCode: Code.ResourceExhausted,
     retryable: true,
   },
 ]);
@@ -481,23 +483,23 @@ const err4 = createf(ErrNotFound, "User %q not found", id);
 
 Pre-defined `ErrorCode` constants provided by the library:
 
-| Constant | Default Connect Code | Default Retryable |
-| --- | --- | --- |
-| `ErrNotFound` | `Code.NotFound` | No |
-| `ErrInvalidArgument` | `Code.InvalidArgument` | No |
-| `ErrAlreadyExists` | `Code.AlreadyExists` | No |
-| `ErrPermissionDenied` | `Code.PermissionDenied` | No |
-| `ErrUnauthenticated` | `Code.Unauthenticated` | No |
-| `ErrInternal` | `Code.Internal` | No |
-| `ErrUnavailable` | `Code.Unavailable` | Yes |
-| `ErrDeadlineExceeded` | `Code.DeadlineExceeded` | Yes |
-| `ErrResourceExhausted` | `Code.ResourceExhausted` | Yes |
-| `ErrFailedPrecondition` | `Code.FailedPrecondition` | No |
-| `ErrAborted` | `Code.Aborted` | Yes |
-| `ErrOutOfRange` | `Code.OutOfRange` | No |
-| `ErrUnimplemented` | `Code.Unimplemented` | No |
-| `ErrCanceled` | `Code.Canceled` | No |
-| `ErrDataLoss` | `Code.DataLoss` | No |
+| Constant                | Default Connect Code      | Default Retryable |
+| ----------------------- | ------------------------- | ----------------- |
+| `ErrNotFound`           | `Code.NotFound`           | No                |
+| `ErrInvalidArgument`    | `Code.InvalidArgument`    | No                |
+| `ErrAlreadyExists`      | `Code.AlreadyExists`      | No                |
+| `ErrPermissionDenied`   | `Code.PermissionDenied`   | No                |
+| `ErrUnauthenticated`    | `Code.Unauthenticated`    | No                |
+| `ErrInternal`           | `Code.Internal`           | No                |
+| `ErrUnavailable`        | `Code.Unavailable`        | Yes               |
+| `ErrDeadlineExceeded`   | `Code.DeadlineExceeded`   | Yes               |
+| `ErrResourceExhausted`  | `Code.ResourceExhausted`  | Yes               |
+| `ErrFailedPrecondition` | `Code.FailedPrecondition` | No                |
+| `ErrAborted`            | `Code.Aborted`            | Yes               |
+| `ErrOutOfRange`         | `Code.OutOfRange`         | No                |
+| `ErrUnimplemented`      | `Code.Unimplemented`      | No                |
+| `ErrCanceled`           | `Code.Canceled`           | No                |
+| `ErrDataLoss`           | `Code.DataLoss`           | No                |
 
 ---
 
@@ -507,10 +509,10 @@ Every error includes both HTTP/gRPC metadata headers and Protobuf `Any` details:
 
 ### Headers
 
-| Header | Example |
-| --- | --- |
+| Header         | Example           |
+| -------------- | ----------------- |
 | `x-error-code` | `ERROR_NOT_FOUND` |
-| `x-retryable` | `true` / `false` |
+| `x-retryable`  | `true` / `false`  |
 
 ### Protobuf Details
 
@@ -525,7 +527,7 @@ import { extractErrorInfo, extractRetryInfo } from "connect-errors";
 
 const info = extractErrorInfo(err);
 if (info) {
-  console.log(info.reason);   // "ERROR_NOT_FOUND"
+  console.log(info.reason); // "ERROR_NOT_FOUND"
   console.log(info.metadata); // { id: "123" }
 }
 

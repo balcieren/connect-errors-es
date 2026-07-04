@@ -51,9 +51,9 @@ export function isRetryable(errOrCode: unknown): boolean {
   return false;
 }
 
-export function connectCode(code: string): Code | null {
+export function statusCode(code: string): Code | null {
   const def = lookup(code);
-  return def ? def.connectCode : null;
+  return def ? def.statusCode : null;
 }
 
 export function matchesError(err: unknown, code: string): boolean {

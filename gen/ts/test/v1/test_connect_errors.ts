@@ -6,16 +6,15 @@ import { create, extractErrorCode, extractErrorInfo, registerAll } from "connect
 import { Code, ConnectError } from "@connectrpc/connect";
 import { ErrorInfo } from "@buf/googleapis_googleapis.bufbuild_es/google/rpc/error_details_pb";
 
-
 // ── Error code constants ────────────────────────────
 export const ErrorCodeUserNotFound = "ERROR_USER_NOT_FOUND" as const;
 
 // ── Auto-register ───────────────────────────────────
 registerAll([
   {
-    code: ErrorCodeUserNotFound,
+    errorCode: ErrorCodeUserNotFound,
     messageTpl: "User with ID {{id}} not found in database {{db}}",
-    connectCode: Code.NotFound,
+    statusCode: Code.NotFound,
     retryable: false,
   },
 ]);

@@ -112,7 +112,7 @@ export function generate(schema: Schema) {
     f.print(registerAll, "([");
     for (const def of errorDefs.values()) {
       f.print("  {");
-      f.print("    code: ", codeToConstantName(def.errorCode), ",");
+      f.print("    errorCode: ", codeToConstantName(def.errorCode), ",");
       f.print("    messageTpl: ", JSON.stringify(def.message), ",");
       const rawCodeName = ProtoCode[def.statusCode] ?? "OK";
       let connectCodeName = "";
@@ -126,7 +126,7 @@ export function generate(schema: Schema) {
           .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
           .join("");
       }
-      f.print("    connectCode: ", Code, ".", connectCodeName, ",");
+      f.print("    statusCode: ", Code, ".", connectCodeName, ",");
       f.print("    retryable: ", def.retryable, ",");
       if (def.retryDelayMs > 0) {
         f.print("    retryDelayMs: ", def.retryDelayMs, ",");
@@ -174,11 +174,11 @@ export function generate(schema: Schema) {
       f.print("export function ", matcherName, "(err: unknown): boolean {");
       f.print("  if (!(err instanceof ", ConnectError, ")) return false;");
       f.print(
-          "  if (",
-          extractErrorCode,
-          "(err) === ",
-          codeToConstantName(def.errorCode),
-          ") return true;",
+        "  if (",
+        extractErrorCode,
+        "(err) === ",
+        codeToConstantName(def.errorCode),
+        ") return true;",
       );
       f.print("  const info = ", extractErrorInfo, "(err);");
       f.print("  return info ? info.reason === ", codeToConstantName(def.errorCode), " : false;");

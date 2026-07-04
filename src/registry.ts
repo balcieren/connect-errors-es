@@ -3,10 +3,10 @@ import { ErrorDefinition } from "./types";
 const registry = new Map<string, ErrorDefinition>();
 
 export function register(def: ErrorDefinition): void {
-  if (!def.code) {
+  if (!def.errorCode) {
     return;
   }
-  registry.set(def.code, def);
+  registry.set(def.errorCode, def);
 }
 
 export function registerAll(defs: ErrorDefinition[]): void {

@@ -7,8 +7,8 @@ import { clearRegistry, register } from "../registry";
 test("errorInterceptor catches ConnectError and extracts definition", async () => {
   clearRegistry();
   register({
-    code: "ERR_TEST",
-    connectCode: Code.Internal,
+    errorCode: "ERR_TEST",
+    statusCode: Code.Internal,
     messageTpl: "Test",
     retryable: false,
   });
@@ -22,5 +22,5 @@ test("errorInterceptor catches ConnectError and extracts definition", async () =
   await expect(interceptor(next)(req)).rejects.toThrow();
 
   expect(callback).toHaveBeenCalledTimes(1);
-  expect(callback.mock.calls[0][1].code).toBe("ERR_TEST");
+  expect(callback.mock.calls[0][1].errorCode).toBe("ERR_TEST");
 });

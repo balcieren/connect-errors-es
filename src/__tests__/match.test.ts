@@ -10,14 +10,14 @@ const ErrorCodeRateLimited = "ERROR_RATE_LIMITED";
 beforeEach(() => {
   clearRegistry();
   register({
-    code: "ERROR_USER_NOT_FOUND",
-    connectCode: Code.NotFound,
+    errorCode: "ERROR_USER_NOT_FOUND",
+    statusCode: Code.NotFound,
     messageTpl: "User '{{id}}' not found",
     retryable: false,
   });
   register({
-    code: "ERROR_RATE_LIMITED",
-    connectCode: Code.ResourceExhausted,
+    errorCode: "ERROR_RATE_LIMITED",
+    statusCode: Code.ResourceExhausted,
     messageTpl: "Slow down",
     retryable: true,
   });

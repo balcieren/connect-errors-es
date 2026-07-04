@@ -15,7 +15,7 @@ jobs:
         run: npm test -- --coverage
       - name: Check coverage threshold (src/ >= 85%)
         run: |
-          COVERAGE=$(npm test -- --coverage 2>&1 | grep "^ src " | head -1 | awk '{print $2}')
+          COVERAGE=$(npm test -- --coverage 2>&1 | grep "^ src " | head -1 | awk '{print $3}')
           echo "src/ coverage: ${COVERAGE}%"
           THRESHOLD=85
           INTEGER=$(echo "$COVERAGE" | cut -d. -f1)

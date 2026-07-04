@@ -13,10 +13,11 @@ import { M } from "./types";
 // Default: no-op (no logging).
 //
 // Example:
-//   setErrorLogger((code, connectCode, retryable, data) => {
-//     console.log('error created', { code, connectCode, retryable, data });
+// Example:
+//   setErrorLogger((code, statusCode, retryable, data) => {
+//     console.log('error created', { code, statusCode, retryable, data });
 //   });
-export type ErrorLogger = (code: string, connectCode: Code, retryable: boolean, data?: M) => void;
+export type ErrorLogger = (code: string, statusCode: Code, retryable: boolean, data?: M) => void;
 
 // ValidationLogger is called when template validation fails.
 // Default: no-op (no logging, no throw).
@@ -39,13 +40,13 @@ let validationLogger: ValidationLogger = () => {};
 //   // Winston integration
 //   import winston from 'winston';
 //   const logger = winston.createLogger({ ... });
-//   setErrorLogger((code, connectCode, retryable, data) => {
-//     logger.info('error created', { code, connectCode, retryable, data });
+//   setErrorLogger((code, statusCode, retryable, data) => {
+//     logger.info('error created', { code, statusCode, retryable, data });
 //   });
 //
 //   // Sentry integration
 //   import * as Sentry from '@sentry/node';
-//   setErrorLogger((code, connectCode, retryable, data) => {
+//   setErrorLogger((code, statusCode, retryable, data) => {
 //     Sentry.withScope((scope) => {
 //       scope.setTag('error_code', code);
 //       Sentry.captureMessage(`Error created: ${code}`);
@@ -146,12 +147,22 @@ export function create(code: string, data?: M): ConnectError {
   }
 
   const message = formatTemplate(def.messageTpl, data);
-  const err = applyMetadata(new ConnectError(message, def.connectCode), code, def.retryable, data, def.retryDelayMs);
-  errorLogger(code, def.connectCode, def.retryable, data);
+  const err = applyMetadata(
+    new ConnectError(message, def.statusCode),
+    code,
+    def.retryable,
+    data,
+    def.retryDelayMs,
+  );
+  errorLogger(code, def.statusCode, def.retryable, data);
   return err;
 }
 
-export function createWithRetry(code: string, data: M | undefined, retryDelayMs: number): ConnectError {
+export function createWithRetry(
+  code: string,
+  data: M | undefined,
+  retryDelayMs: number,
+): ConnectError {
   const def = lookup(code);
   if (!def) {
     const err = applyMetadata(
@@ -171,12 +182,23 @@ export function createWithRetry(code: string, data: M | undefined, retryDelayMs:
   }
 
   const message = formatTemplate(def.messageTpl, data);
-  const err = applyMetadata(new ConnectError(message, def.connectCode), code, def.retryable, data, retryDelayMs);
-  errorLogger(code, def.connectCode, def.retryable, data);
+  const err = applyMetadata(
+    new ConnectError(message, def.statusCode),
+    code,
+    def.retryable,
+    data,
+    retryDelayMs,
+  );
+  errorLogger(code, def.statusCode, def.retryable, data);
   return err;
 }
 
-export function createWithMessage(code: string, message: string, data?: M, retryDelayMsOverride?: number): ConnectError {
+export function createWithMessage(
+  code: string,
+  message: string,
+  data?: M,
+  retryDelayMsOverride?: number,
+): ConnectError {
   const def = lookup(code);
   if (!def) {
     const delay = retryDelayMsOverride ?? 0;
@@ -195,8 +217,14 @@ export function createWithMessage(code: string, message: string, data?: M, retry
   }
 
   const delay = retryDelayMsOverride ?? def.retryDelayMs;
-  const err = applyMetadata(new ConnectError(message, def.connectCode), code, def.retryable, data, delay);
-  errorLogger(code, def.connectCode, def.retryable, data);
+  const err = applyMetadata(
+    new ConnectError(message, def.statusCode),
+    code,
+    def.retryable,
+    data,
+    delay,
+  );
+  errorLogger(code, def.statusCode, def.retryable, data);
   return err;
 }
 
@@ -208,15 +236,21 @@ export function createf(code: string, format: string, ...args: unknown[]): Conne
     errorLogger(code, Code.Internal, false);
     return err;
   }
-  const err = applyMetadata(new ConnectError(message, def.connectCode), code, def.retryable, undefined, def.retryDelayMs);
-  errorLogger(code, def.connectCode, def.retryable);
+  const err = applyMetadata(
+    new ConnectError(message, def.statusCode),
+    code,
+    def.retryable,
+    undefined,
+    def.retryDelayMs,
+  );
+  errorLogger(code, def.statusCode, def.retryable);
   return err;
 }
 
 export function wrap(code: string, cause: unknown, data?: M): ConnectError {
   const def = lookup(code);
   let message = "unknown error";
-  let connectCode = Code.Internal;
+  let statusCode = Code.Internal;
   let retryable = false;
   let retryDelayMs: number | undefined;
 
@@ -227,22 +261,26 @@ export function wrap(code: string, cause: unknown, data?: M): ConnectError {
       validationLogger(code, data, e as Error);
     }
     message = formatTemplate(def.messageTpl, data);
-    connectCode = def.connectCode;
+    statusCode = def.statusCode;
     retryable = def.retryable;
     retryDelayMs = def.retryDelayMs;
   }
 
-  const err = new ConnectError(message, connectCode, undefined, undefined, cause);
+  const err = new ConnectError(message, statusCode, undefined, undefined, cause);
   const result = applyMetadata(err, code, retryable, data, retryDelayMs);
-  errorLogger(code, connectCode, retryable, data);
+  errorLogger(code, statusCode, retryable, data);
   return result;
 }
 
-export function fromCode(connectCode: Code, message: string): ConnectError {
-  return new ConnectError(message, connectCode);
+export function fromCode(statusCode: Code, message: string): ConnectError {
+  return new ConnectError(message, statusCode);
 }
 
-export function withFieldViolation(err: ConnectError, field: string, description: string): ConnectError {
+export function withFieldViolation(
+  err: ConnectError,
+  field: string,
+  description: string,
+): ConnectError {
   err.details.push({
     desc: BadRequestSchema,
     value: {

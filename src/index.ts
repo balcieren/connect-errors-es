@@ -6,11 +6,21 @@ export { lookup, register, registerAll, codes } from "./registry";
 
 export { getDomain, getHeaderKeys, setDomain, setHeaderKeys } from "./config";
 
-export { create, createWithMessage, createWithRetry, createf, fromCode, wrap, withFieldViolation, setErrorLogger, setValidationLogger } from "./create";
+export {
+  create,
+  createWithMessage,
+  createWithRetry,
+  createf,
+  fromCode,
+  wrap,
+  withFieldViolation,
+  setErrorLogger,
+  setValidationLogger,
+} from "./create";
 export type { ErrorLogger, ValidationLogger } from "./create";
 
 export {
-  connectCode,
+  statusCode,
   extractErrorCode,
   extractErrorInfo,
   extractRetryInfo,

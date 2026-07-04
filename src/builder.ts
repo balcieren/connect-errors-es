@@ -49,7 +49,8 @@ export class ErrorBuilder {
 
   build(): ConnectError {
     let err: ConnectError;
-    const retryDelay = this.retryDelayMs !== undefined && this.retryDelayMs > 0 ? this.retryDelayMs : undefined;
+    const retryDelay =
+      this.retryDelayMs !== undefined && this.retryDelayMs > 0 ? this.retryDelayMs : undefined;
 
     if (this.customMsg) {
       err = createWithMessage(this.code, this.customMsg, this.data, retryDelay);
