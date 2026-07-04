@@ -1,6 +1,7 @@
 import { getExtension, hasExtension } from "@bufbuild/protobuf";
 import { Schema } from "@bufbuild/protoplugin";
-import { Code as ProtoCode, connect_error, error } from "./gen/connecterrors/v1/error_pb";
+import { Code as ProtoCode } from "@buf/googleapis_googleapis.bufbuild_es/google/rpc/code_pb.js";
+import { rpc_error, file_error } from "./gen/errors/v1/error_pb.js";
 import {
   codeToConstantName,
   codeToConstructorName,
@@ -32,9 +33,9 @@ export function generate(schema: Schema) {
     const errorDefs = new Map<
       string,
       {
-        code: string;
+        errorCode: string;
         message: string;
-        connectCode: ProtoCode;
+        statusCode: ProtoCode;
         retryable: boolean;
         retryDelayMs: number;
       }
@@ -47,14 +48,14 @@ export function generate(schema: Schema) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (schema.targets as any[]).includes(file) &&
       file.proto.options &&
-      hasExtension(file.proto.options, error)
+      hasExtension(file.proto.options, file_error)
     ) {
-      const fileErrors = getExtension(file.proto.options, error);
+      const fileErrors = getExtension(file.proto.options, file_error);
       for (const e of fileErrors) {
-        errorDefs.set(e.code, {
-          code: e.code,
+        errorDefs.set(e.errorCode, {
+          errorCode: e.errorCode,
           message: e.message,
-          connectCode: e.connectCode,
+          statusCode: e.statusCode,
           retryable: e.retryable,
           retryDelayMs: e.retryDelayMs !== undefined ? Number(e.retryDelayMs) : 0,
         });
@@ -64,13 +65,13 @@ export function generate(schema: Schema) {
     // 2. Gather method-level errors
     for (const service of file.services) {
       for (const method of service.methods) {
-        if (method.proto.options && hasExtension(method.proto.options, connect_error)) {
-          const methodErrors = getExtension(method.proto.options, connect_error);
+        if (method.proto.options && hasExtension(method.proto.options, rpc_error)) {
+          const methodErrors = getExtension(method.proto.options, rpc_error);
           for (const e of methodErrors) {
-            errorDefs.set(e.code, {
-              code: e.code,
+            errorDefs.set(e.errorCode, {
+              errorCode: e.errorCode,
               message: e.message,
-              connectCode: e.connectCode,
+              statusCode: e.statusCode,
               retryable: e.retryable,
               retryDelayMs: e.retryDelayMs !== undefined ? Number(e.retryDelayMs) : 0,
             });
@@ -103,7 +104,7 @@ export function generate(schema: Schema) {
     f.print();
     f.print("// ── Error code constants ────────────────────────────");
     for (const def of errorDefs.values()) {
-      f.print(`export const ${codeToConstantName(def.code)} = "${def.code}" as const;`);
+      f.print(`export const ${codeToConstantName(def.errorCode)} = "${def.errorCode}" as const;`);
     }
 
     f.print();
@@ -111,16 +112,20 @@ export function generate(schema: Schema) {
     f.print(registerAll, "([");
     for (const def of errorDefs.values()) {
       f.print("  {");
-      f.print("    code: ", codeToConstantName(def.code), ",");
+      f.print("    code: ", codeToConstantName(def.errorCode), ",");
       f.print("    messageTpl: ", JSON.stringify(def.message), ",");
-      const rawCodeName = ProtoCode[def.connectCode] ?? "UNSPECIFIED";
-      const connectCodeName =
-        rawCodeName === "UNSPECIFIED"
-          ? "Unknown"
-          : rawCodeName
-              .split("_")
-              .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
-              .join("");
+      const rawCodeName = ProtoCode[def.statusCode] ?? "OK";
+      let connectCodeName = "";
+      if (rawCodeName === "OK") {
+        connectCodeName = "Unknown";
+      } else if (rawCodeName === "CANCELLED") {
+        connectCodeName = "Canceled";
+      } else {
+        connectCodeName = rawCodeName
+          .split("_")
+          .map((p: string) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+          .join("");
+      }
       f.print("    connectCode: ", Code, ".", connectCodeName, ",");
       f.print("    retryable: ", def.retryable, ",");
       if (def.retryDelayMs > 0) {
@@ -134,8 +139,8 @@ export function generate(schema: Schema) {
     f.print("// ── Typed constructors ──────────────────────────────");
     for (const def of errorDefs.values()) {
       const fields = extractTemplateFields(def.message);
-      const funcName = codeToConstructorName(def.code);
-      const paramsName = codeToParamsName(def.code);
+      const funcName = codeToConstructorName(def.errorCode);
+      const paramsName = codeToParamsName(def.errorCode);
 
       f.print();
       if (fields.length > 0) {
@@ -146,7 +151,7 @@ export function generate(schema: Schema) {
         f.print("}");
         f.print();
         f.print("export function ", funcName, "(p: ", paramsName, "): ", ConnectError, " {");
-        f.print("  return ", create, "(", codeToConstantName(def.code), ", {");
+        f.print("  return ", create, "(", codeToConstantName(def.errorCode), ", {");
         for (const field of fields) {
           f.print("    ", field, ": p.", field, ",");
         }
@@ -154,7 +159,7 @@ export function generate(schema: Schema) {
         f.print("}");
       } else {
         f.print("export function ", funcName, "(): ", ConnectError, " {");
-        f.print("  return ", create, "(", codeToConstantName(def.code), ");");
+        f.print("  return ", create, "(", codeToConstantName(def.errorCode), ");");
         f.print("}");
       }
     }
@@ -162,21 +167,21 @@ export function generate(schema: Schema) {
     f.print();
     f.print("// ── Client-side error matchers ──────────────────────");
     for (const def of errorDefs.values()) {
-      const matcherName = codeToMatcherName(def.code);
+      const matcherName = codeToMatcherName(def.errorCode);
       const infoName = matcherName.replace(/^is/, "extract").replace(/Error$/, "Info");
 
       f.print();
       f.print("export function ", matcherName, "(err: unknown): boolean {");
       f.print("  if (!(err instanceof ", ConnectError, ")) return false;");
       f.print(
-        "  if (",
-        extractErrorCode,
-        "(err) === ",
-        codeToConstantName(def.code),
-        ") return true;",
+          "  if (",
+          extractErrorCode,
+          "(err) === ",
+          codeToConstantName(def.errorCode),
+          ") return true;",
       );
       f.print("  const info = ", extractErrorInfo, "(err);");
-      f.print("  return info ? info.reason === ", codeToConstantName(def.code), " : false;");
+      f.print("  return info ? info.reason === ", codeToConstantName(def.errorCode), " : false;");
       f.print("}");
 
       f.print();
