@@ -11,10 +11,10 @@ The ECMAScript/TypeScript counterpart of [`connect-errors-go`](https://github.co
 
 ```protobuf
 // Define in your .proto file
-option (connecterrors.v1.error) = {
-  code: "ERROR_USER_NOT_FOUND"
+option (errors.v1.file_error) = {
+  error_code: "ERROR_USER_NOT_FOUND"
   message: "User '{{id}}' not found"
-  connect_code: CODE_NOT_FOUND
+  status_code: NOT_FOUND
 };
 ```
 
@@ -73,7 +73,7 @@ version: v2
 modules:
   - path: proto
 deps:
-  - buf.build/balcieren/connect-errors
+  - buf.build/balcieren/errors
 ```
 
 Run `buf dep update` to download the schema.
@@ -129,30 +129,30 @@ npx protoc \
 
 ## Step 2: Define Errors in Proto
 
-See the [full instructions](https://buf.build/balcieren/connect-errors) for defining errors using the custom `connecterrors.v1` proto options.
+See the [full instructions](https://buf.build/balcieren/errors) for defining errors using the custom `errors.v1` proto options.
 
-## Step 3: Available Connect Error Codes
+## Step 3: Available RPC Error Codes
 
-When defining errors in your `.proto` file, use the following values for the `connect_code` field. These map to standard [Connect RPC status codes](https://connectrpc.com/docs/protocol/#error-codes).
+When defining errors in your `.proto` file, use the following values for the `status_code` field. These map to standard status codes.
 
-| `connect_code`             | Description                                                                             |
-| :------------------------- | :-------------------------------------------------------------------------------------- |
-| `CODE_CANCELED`            | The operation was canceled.                                                             |
-| `CODE_UNKNOWN`             | Unknown error.                                                                          |
-| `CODE_INVALID_ARGUMENT`    | Client specified an invalid argument.                                                   |
-| `CODE_DEADLINE_EXCEEDED`   | Deadline expired before operation could complete.                                       |
-| `CODE_NOT_FOUND`           | Some requested entity was not found.                                                    |
-| `CODE_ALREADY_EXISTS`      | Some entity that we attempted to create already exists.                                 |
-| `CODE_PERMISSION_DENIED`   | The caller does not have permission to execute the operation.                           |
-| `CODE_RESOURCE_EXHAUSTED`  | Some resource has been exhausted (e.g. per-user quota).                                 |
-| `CODE_FAILED_PRECONDITION` | Operation was rejected because the system is not in a state required for its execution. |
-| `CODE_ABORTED`             | The operation was aborted.                                                              |
-| `CODE_OUT_OF_RANGE`        | Operation was attempted past the valid range.                                           |
-| `CODE_UNIMPLEMENTED`       | Operation is not implemented or not supported/enabled.                                  |
-| `CODE_INTERNAL`            | Internal errors.                                                                        |
-| `CODE_UNAVAILABLE`         | The service is currently unavailable.                                                   |
-| `CODE_DATA_LOSS`           | Unrecoverable data loss or corruption.                                                  |
-| `CODE_UNAUTHENTICATED`     | The request does not have valid authentication credentials.                             |
+| `status_code`         | Description                                                                             |
+| :-------------------- | :-------------------------------------------------------------------------------------- |
+| `CANCELED`            | The operation was canceled.                                                             |
+| `UNKNOWN`             | Unknown error.                                                                          |
+| `INVALID_ARGUMENT`    | Client specified an invalid argument.                                                   |
+| `DEADLINE_EXCEEDED`   | Deadline expired before operation could complete.                                       |
+| `NOT_FOUND`         | Some requested entity was not found.                                                    |
+| `ALREADY_EXISTS`      | Some entity that we attempted to create already exists.                                 |
+| `PERMISSION_DENIED`   | The caller does not have permission to execute the operation.                           |
+| `RESOURCE_EXHAUSTED`  | Some resource has been exhausted (e.g. per-user quota).                                 |
+| `FAILED_PRECONDITION` | Operation was rejected because the system is not in a state required for its execution. |
+| `ABORTED`             | The operation was aborted.                                                              |
+| `OUT_OF_RANGE`        | Operation was attempted past the valid range.                                           |
+| `UNIMPLEMENTED`       | Operation is not implemented or not supported/enabled.                                  |
+| `INTERNAL`            | Internal errors.                                                                        |
+| `UNAVAILABLE`         | The service is currently unavailable.                                                   |
+| `DATA_LOSS`           | Unrecoverable data loss or corruption.                                                  |
+| `UNAUTHENTICATED`     | The request does not have valid authentication credentials.                             |
 
 ## Features & Usage
 
