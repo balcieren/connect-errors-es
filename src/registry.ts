@@ -3,6 +3,9 @@ import { ErrorDefinition } from "./types";
 const registry = new Map<string, ErrorDefinition>();
 
 export function register(def: ErrorDefinition): void {
+  if (!def.code) {
+    return;
+  }
   registry.set(def.code, def);
 }
 
@@ -14,6 +17,12 @@ export function registerAll(defs: ErrorDefinition[]): void {
 
 export function lookup(code: string): ErrorDefinition | undefined {
   return registry.get(code);
+}
+
+export function codes(): string[] {
+  const result = Array.from(registry.keys());
+  result.sort();
+  return result;
 }
 
 // For testing purposes
