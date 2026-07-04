@@ -2,14 +2,14 @@ syntax = "proto3";
 
 package test.v1;
 
-import "connecterrors/v1/error.proto";
+import "errors/v1/error.proto";
 
 service TestService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {
-    option (connecterrors.v1.connect_error) = {
-      code: "ERROR_USER_NOT_FOUND"
+    option (errors.v1.rpc_error) = {
+      error_code: "ERROR_USER_NOT_FOUND"
       message: "User with ID {{id}} not found in database {{db}}"
-      connect_code: CODE_NOT_FOUND
+      status_code: NOT_FOUND
     };
   }
 }

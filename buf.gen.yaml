@@ -4,4 +4,7 @@ managed:
 plugins:
   - local: protoc-gen-es
     out: src/plugin/gen
-    opt: target=ts
+    opt:
+      - target=ts
+      - import_extension=js
+      - rewrite_imports=./google/rpc/code_pb.js:@buf/googleapis_googleapis.bufbuild_es
