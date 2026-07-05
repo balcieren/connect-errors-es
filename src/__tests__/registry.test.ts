@@ -1,9 +1,9 @@
 import { Code } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
-import { clearRegistry, codes, lookup, register, registerAll } from "../registry";
+import { _clearInternal, codes, lookup, register, registerAll } from "../registry";
 
 beforeEach(() => {
-  clearRegistry();
+  _clearInternal();
 });
 
 test("register and lookup", () => {

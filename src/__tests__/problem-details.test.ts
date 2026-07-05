@@ -1,7 +1,7 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { describe, expect, test } from "vitest";
 import { toProblemDetails } from "../problem-details";
-import { clearRegistry, register } from "../registry";
+import { _clearInternal, register } from "../registry";
 
 describe("toProblemDetails", () => {
   test("returns undefined for non-ConnectError", () => {
@@ -20,7 +20,7 @@ describe("toProblemDetails", () => {
   });
 
   test("returns problem details for ConnectError with registered code", () => {
-    clearRegistry();
+    _clearInternal();
     register({
       errorCode: "ERROR_NOT_FOUND",
       statusCode: Code.NotFound,

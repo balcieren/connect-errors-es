@@ -2,10 +2,10 @@ import { Code, UnaryRequest } from "@connectrpc/connect";
 import { expect, test, vi } from "vitest";
 import { create } from "../create";
 import { createErrorInterceptor } from "../interceptor";
-import { clearRegistry, register } from "../registry";
+import { _clearInternal, register } from "../registry";
 
 test("errorInterceptor catches ConnectError and extracts definition", async () => {
-  clearRegistry();
+  _clearInternal();
   register({
     errorCode: "ERR_TEST",
     statusCode: Code.Internal,

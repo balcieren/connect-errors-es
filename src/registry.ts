@@ -25,7 +25,8 @@ export function codes(): string[] {
   return result;
 }
 
-// For testing purposes
-export function clearRegistry(): void {
+// _clearInternal clears the registry map without restoring defaults.
+// Only used internally by resetRegistry.
+export function _clearInternal(): void {
   registry.clear();
 }

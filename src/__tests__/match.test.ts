@@ -2,13 +2,13 @@ import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { create } from "../create";
 import { matchError, matchesError } from "../inspect";
-import { clearRegistry, register } from "../registry";
+import { _clearInternal, register } from "../registry";
 
 const ErrorCodeUserNotFound = "ERROR_USER_NOT_FOUND";
 const ErrorCodeRateLimited = "ERROR_RATE_LIMITED";
 
 beforeEach(() => {
-  clearRegistry();
+  _clearInternal();
   register({
     errorCode: "ERROR_USER_NOT_FOUND",
     statusCode: Code.NotFound,

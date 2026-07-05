@@ -10,10 +10,10 @@ import {
   fromError,
   isRetryable,
 } from "../inspect";
-import { clearRegistry, register } from "../registry";
+import { _clearInternal, register } from "../registry";
 
 beforeEach(() => {
-  clearRegistry();
+  _clearInternal();
   register({
     errorCode: "ERROR_USER_NOT_FOUND",
     statusCode: Code.NotFound,
