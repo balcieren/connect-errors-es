@@ -13,7 +13,6 @@ import { M } from "./types";
 // Default: no-op (no logging).
 //
 // Example:
-// Example:
 //   setErrorLogger((code, statusCode, retryable, data) => {
 //     console.log('error created', { code, statusCode, retryable, data });
 //   });
