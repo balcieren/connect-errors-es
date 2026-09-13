@@ -1,6 +1,7 @@
 import { Code } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { _clearInternal, codes, lookup, register, registerAll } from "../registry";
+import { resetRegistry } from "../codes";
 
 beforeEach(() => {
   _clearInternal();
@@ -58,4 +59,13 @@ test("codes returns sorted list of registered codes", () => {
   };
   registerAll([def1, def2]);
   expect(codes()).toEqual(["ERR_A", "ERR_B"]);
+});
+
+test("resetRegistry restores built-in defaults", () => {
+  expect(lookup("ERROR_NOT_FOUND")).toBeUndefined(); // cleared by beforeEach
+
+  resetRegistry();
+
+  expect(lookup("ERROR_NOT_FOUND")).toBeDefined();
+  expect(lookup("ERROR_NOT_FOUND")?.statusCode).toBe(Code.NotFound);
 });

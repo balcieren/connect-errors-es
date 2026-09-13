@@ -1,7 +1,16 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { beforeEach, expect, test } from "vitest";
 import { getHeaderKeys } from "../config";
-import { create, createf, createWithMessage, wrap, fromCode, setValidationLogger } from "../create";
+import {
+  create,
+  createf,
+  createWithMessage,
+  createWithRetry,
+  wrap,
+  fromCode,
+  setErrorLogger,
+  setValidationLogger,
+} from "../create";
 import {
   statusCode,
   extractErrorCode,
@@ -9,6 +18,8 @@ import {
   extractRetryInfo,
   fromError,
   isRetryable,
+  matchError,
+  matchesError,
 } from "../inspect";
 import { _clearInternal, register } from "../registry";
 
@@ -110,4 +121,120 @@ test("wrap with missing template parameters triggers validation logger", () => {
   expect(loggedErr?.message).toContain("Missing template fields: id");
 
   setValidationLogger(() => {});
+});
+
+test("setErrorLogger captures error creations", () => {
+  const logged: Array<{ code: string; statusCode: Code; retryable: boolean }> = [];
+  setErrorLogger((code, statusCode, retryable) => {
+    logged.push({ code, statusCode, retryable });
+  });
+
+  create("ERROR_USER_NOT_FOUND", { id: "1" });
+
+  expect(logged).toHaveLength(1);
+  expect(logged[0]).toEqual({
+    code: "ERROR_USER_NOT_FOUND",
+    statusCode: Code.NotFound,
+    retryable: true,
+  });
+
+  setErrorLogger(() => {});
+});
+
+test("create with missing template fields triggers validation logger", () => {
+  let loggedErr: Error | undefined;
+  setValidationLogger((_code: string, _data: Record<string, string> | undefined, err: Error) => {
+    loggedErr = err;
+  });
+
+  const err = create("ERROR_USER_NOT_FOUND", {}); // missing "id" placeholder
+
+  expect(err.rawMessage).toBe("User '{{id}}' not found");
+  expect(loggedErr).toBeDefined();
+  expect(loggedErr?.message).toContain("Missing template fields: id");
+
+  setValidationLogger(() => {});
+});
+
+test("createWithRetry applies custom retry delay", () => {
+  const err = createWithRetry("ERROR_USER_NOT_FOUND", { id: "2" }, 1500);
+  expect(err.code).toBe(Code.NotFound);
+
+  const retry = extractRetryInfo(err);
+  expect(retry?.retryDelay?.seconds).toBe(1n);
+  expect(retry?.retryDelay?.nanos).toBe(500000000);
+});
+
+test("createWithRetry with missing template fields triggers validation logger", () => {
+  let loggedErr: Error | undefined;
+  setValidationLogger((_code: string, _data: Record<string, string> | undefined, err: Error) => {
+    loggedErr = err;
+  });
+
+  createWithRetry("ERROR_USER_NOT_FOUND", {}, 1000); // missing "id" placeholder
+
+  expect(loggedErr).toBeDefined();
+  expect(loggedErr?.message).toContain("Missing template fields: id");
+
+  setValidationLogger(() => {});
+});
+
+test("createWithRetry with unknown code returns internal error", () => {
+  const err = createWithRetry("UNKNOWN", undefined, 1000);
+  expect(err.code).toBe(Code.Internal);
+  expect(extractErrorCode(err)).toBe("UNKNOWN");
+});
+
+test("createWithMessage with unknown code keeps custom message", () => {
+  const err = createWithMessage("UNKNOWN", "Custom msg");
+  expect(err.code).toBe(Code.Internal);
+  expect(err.rawMessage).toBe("Custom msg");
+  expect(extractErrorCode(err)).toBe("UNKNOWN");
+});
+
+test("createWithMessage with missing template fields triggers validation logger", () => {
+  let loggedErr: Error | undefined;
+  setValidationLogger((_code: string, _data: Record<string, string> | undefined, err: Error) => {
+    loggedErr = err;
+  });
+
+  const err = createWithMessage("ERROR_USER_NOT_FOUND", "User '{{id}}' not found", {});
+
+  expect(err.rawMessage).toBe("User '{{id}}' not found");
+  expect(loggedErr).toBeDefined();
+  expect(loggedErr?.message).toContain("Missing template fields: id");
+
+  setValidationLogger(() => {});
+});
+
+test("createf formats message with sprintf specifiers", () => {
+  const err = createf(
+    "ERROR_USER_NOT_FOUND",
+    "User %s (%d) paid %f%% %v %v",
+    "alice",
+    42,
+    2.5,
+    null,
+    undefined,
+  );
+  expect(err.rawMessage).toBe("User alice (42) paid 2.5% null undefined");
+});
+
+test("createf with unknown code returns internal error", () => {
+  const err = createf("UNKNOWN", "Formatted %s", "value");
+  expect(err.code).toBe(Code.Internal);
+  expect(err.rawMessage).toBe("Formatted value");
+  expect(extractErrorCode(err)).toBe("UNKNOWN");
+});
+
+test("inspect and match helpers handle non-ConnectError values", () => {
+  const plain = new Error("plain error");
+
+  expect(extractErrorInfo(plain)).toBeUndefined();
+  expect(extractRetryInfo(plain)).toBeUndefined();
+  expect(extractErrorCode(plain)).toBeUndefined();
+  expect(fromError(plain)).toBeNull();
+  expect(isRetryable(42)).toBe(false);
+  expect(matchesError(plain, "ERROR_USER_NOT_FOUND")).toBe(false);
+  expect(matchError(plain, { ERROR_USER_NOT_FOUND: () => "not found" })).toBeUndefined();
 });

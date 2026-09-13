@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { createBuilder } from "../builder";
+import { createBuilder, createCtx, setContextExtractor } from "../builder";
 import { setDomain } from "../index";
-import { extractRetryInfo } from "../inspect";
+import { extractErrorInfo, extractRetryInfo } from "../inspect";
 
 describe("ErrorBuilder", () => {
   test("basic build with data", () => {
@@ -88,5 +88,25 @@ describe("ErrorBuilder", () => {
 
     // Should have: ErrorInfo + 2 BadRequest details
     expect(err.details.length).toBeGreaterThanOrEqual(3);
+  });
+
+  test("createCtx merges extracted context data", () => {
+    // Default extractor contributes no context data
+    const plain = createCtx({}, "ERROR_NOT_FOUND");
+    expect(plain.message).toContain("Resource not found");
+
+    const plainInfo = extractErrorInfo(plain);
+    expect(plainInfo?.metadata["tenant"]).toBeUndefined();
+
+    // Custom extractor merges context data with explicit data
+    setContextExtractor((ctx) => ({ tenant: (ctx as { tenant: string }).tenant }));
+    const err = createCtx({ tenant: "acme" }, "ERROR_NOT_FOUND", { id: "7" });
+    expect(err.message).toContain("Resource not found");
+
+    const info = extractErrorInfo(err);
+    expect(info?.metadata["tenant"]).toBe("acme");
+    expect(info?.metadata["id"]).toBe("7");
+
+    setContextExtractor(() => ({})); // restore default
   });
 });
