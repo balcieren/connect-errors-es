@@ -55,6 +55,9 @@
   "peerDependencies": {
     "@connectrpc/connect": ">=1.0.0"
   },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  },
   "devDependencies": {
     "@bufbuild/buf": "^1.65.0",
     "@bufbuild/protoc-gen-es": "^2.11.0",
