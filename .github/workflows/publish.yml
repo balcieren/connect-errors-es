@@ -34,6 +34,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add package.json package-lock.json || true
           git commit -m "chore: bump version to ${{ github.event.release.tag_name }} [skip ci]" || echo "No changes to commit"
+          git fetch origin ${{ github.event.release.target_commitish }}
+          git rebase origin/${{ github.event.release.target_commitish }}
           git push origin HEAD:${{ github.event.release.target_commitish }}
 
       - run: npm publish
